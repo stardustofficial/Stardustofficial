@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STARDUST | Official Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .hero-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans">
+
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-black tracking-wider text-indigo-400">STARDUST</div>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#hero" class="hover:text-indigo-400 transition">Home</a>
+                <a href="#about" class="hover:text-indigo-400 transition">About</a>
+                <a href="#products" class="hover:text-indigo-400 transition">Our Webs & Games</a>
+                <a href="#updates" class="hover:text-indigo-400 transition">Updates</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero" class="hero-bg min-h-screen flex items-center justify-center text-center px-4">
+        <div class="max-w-3xl">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Shaping The Digital Universe
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 mb-8">
+                Welcome to STARDUST. We build innovative web applications, immersive games, and digital experiences. Everything we create, all in one place.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#products" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition">
+                    Explore Our Projects
+                </a>
+                <a href="#updates" class="border border-slate-700 hover:bg-slate-800 text-slate-300 font-semibold px-6 py-3 rounded-lg transition">
+                    Latest Updates
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 px-6 max-w-5xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">About STARDUST</h2>
+            <div class="h-1 w-20 bg-indigo-500 mx-auto rounded"></div>
+        </div>
+        <p class="text-slate-400 text-lg text-center leading-relaxed">
+            STARDUST ek modern digital company hai jo user-friendly websites aur exciting games banane me believe karti hai. Humara maqsad naye ideas ko generate karna aur unhe web ki madad se logo tak pahunchana hai. GitHub Pages ke zariye hum high-performance aur secure webs deploy karte hain.
+        </p>
+    </section>
+
+    <section id="products" class="py-24 bg-slate-950 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Ecosystem</h2>
+                <p class="text-slate-400">Hamare saare webs aur games yahan se access karein</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-indigo-500 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-pink-500 bg-pink-500/10 px-3 py-1 rounded-full">Game</span>
+                        <h3 class="text-xl font-bold mt-4 mb-2">Space Explorer</h3>
+                        <p class="text-slate-400 text-sm mb-4">Ek immersive 2D space simulation game jo aapko galaxy explore karne ka mauka deta hai.</p>
+                    </div>
+                    <a href="https://yourusername.github.io/space-explorer" target="_blank" class="text-indigo-400 font-medium inline-flex items-center hover:underline">
+                        Play Now &rarr;
+                    </a>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-indigo-500 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-indigo-500 bg-indigo-500/10 px-3 py-1 rounded-full">Web Tool</span>
+                        <h3 class="text-xl font-bold mt-4 mb-2">Stardust Utility Box</h3>
+                        <p class="text-slate-400 text-sm mb-4">Daily developers aur creators ke liye ek useful online toolset aur dashboard.</p>
+                    </div>
+                    <a href="https://yourusername.github.io/utility-box" target="_blank" class="text-indigo-400 font-medium inline-flex items-center hover:underline">
+                        Open App &rarr;
+                    </a>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-indigo-500 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full">Website</span>
+                        <h3 class="text-xl font-bold mt-4 mb-2">Community Forum</h3>
+                        <p class="text-slate-400 text-sm mb-4">STARDUST ke users aur players ke liye ek centralized discussion aur chat board.</p>
+                    </div>
+                    <a href="https://yourusername.github.io/forum" target="_blank" class="text-indigo-400 font-medium inline-flex items-center hover:underline">
+                        Visit Site &rarr;
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="updates" class="py-24 px-6 max-w-5xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Company Updates</h2>
+            <p class="text-slate-400">STARDUST me kya naya chal raha hai?</p>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-slate-950 p-6 rounded-lg border-l-4 border-indigo-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h4 class="text-lg font-bold">New Website Launcher Coming Soon!</h4>
+                    <p class="text-slate-400 text-sm mt-1">Hum ek naya game aur web dashboard launch karne wale hain next month.</p>
+                </div>
+                <span class="text-xs text-slate-500 whitespace-nowrap">June 2026</span>
+            </div>
+
+            <div class="bg-slate-950 p-6 rounded-lg border-l-4 border-slate-700 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h4 class="text-lg font-bold">STARDUST Hub Live</h4>
+                    <p class="text-slate-400 text-sm mt-1">Hamari main company website ab officially GitHub Pages par live ho chuki hai.</p>
+                </div>
+                <span class="text-xs text-slate-500 whitespace-nowrap">May 2026</span>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-slate-800 bg-slate-950 py-8 text-center text-slate-500 text-sm">
+        <p>&copy; 2026 STARDUST. All rights reserved.</p>
+        <p class="mt-2 text-xs text-slate-600">Made by Zishan</p>
+    </footer>
+
+</body>
+</html>
