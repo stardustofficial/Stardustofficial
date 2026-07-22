@@ -1,301 +1,762 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark scroll-smooth">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>STARDUST · Global Tech Ecosystem</title>
-    <!-- Tailwind + Inter -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STARDUST | Global Enterprise Ecosystem</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'><path d='M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z'/></svg>">
+    
+    <!-- Tailwind CSS v4 & Lucide Icons -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
-    <!-- Font Awesome (free icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: #fafcff; }
-        .glass-nav { background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(226, 232, 240, 0.6); }
-        .hero-glow { background: radial-gradient(ellipse at 70% 20%, rgba(37, 99, 235, 0.08), transparent 70%), radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.06), transparent 60%); }
-        .card-hover { transition: all 0.3s cubic-bezier(0.2, 0, 0, 1); }
-        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08); border-color: #b3c9ff; }
-        .timeline-dot { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
-        .status-pulse { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        .bg-grid { background-image: linear-gradient(rgba(226, 232, 240, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(226, 232, 240, 0.3) 1px, transparent 1px); background-size: 60px 60px; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.15);
+        }
+
+        .glass-nav {
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Ambient Glow Animations */
+        .glow-bg {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            opacity: 0.35;
+        }
+
+        .animated-gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientMove 6s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Grid Background Pattern */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray-950 text-gray-100 antialiased selection:bg-blue-500 selection:text-white">
 
-    <!-- ========== NAVIGATION ========== -->
-    <header class="fixed top-0 left-0 w-full z-50 glass-nav">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <!-- Logo + Icon -->
-            <a href="#" class="flex items-center gap-3 group">
-                <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-200">
-                    <i class="fas fa-star text-white text-sm"></i>
+    <!-- Ambient Lighting Effects -->
+    <div class="glow-bg w-[500px] h-[500px] bg-blue-600 -top-32 -left-32"></div>
+    <div class="glow-bg w-[600px] h-[600px] bg-purple-600 top-1/3 -right-48"></div>
+    <div class="glow-bg w-[500px] h-[500px] bg-cyan-600 bottom-10 left-1/4"></div>
+
+    <!-- Live System Status Bar -->
+    <div class="bg-slate-900/90 border-b border-gray-800 text-xs py-2 px-6 sticky top-0 z-50 glass-nav">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
-                <span class="text-xl font-black tracking-tight text-slate-900">STARDUST</span>
-                <span class="hidden sm:inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">SYSTEMS</span>
+                <span class="text-gray-300 font-medium">STARDUST Ecosystem Status: <strong class="text-emerald-400">All Systems Operational</strong></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6 text-gray-400 font-mono text-[11px]">
+                <span>API Node: 99.99%</span>
+                <span>Latency: 12ms</span>
+                <span>Security Level: Enterprise Grade</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-9 z-40 glass-nav border-b border-gray-800/60">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            
+            <!-- Brand Logo -->
+            <a href="#hero" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 p-0.5 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full bg-gray-950 rounded-[10px] flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-blue-400"></i>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-black tracking-wider text-white uppercase">STARDUST</span>
+                    <span class="text-[9px] text-blue-400 tracking-widest font-mono font-bold uppercase -mt-1">Ecosystem</span>
+                </div>
             </a>
 
-            <!-- Desktop Nav -->
-            <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
-                <a href="#products" class="hover:text-blue-600 transition">Products</a>
-                <a href="#developers" class="hover:text-blue-600 transition">Developers</a>
-                <a href="#research" class="hover:text-blue-600 transition">Research</a>
-                <a href="#company" class="hover:text-blue-600 transition">Company</a>
-                <a href="#news" class="hover:text-blue-600 transition">News</a>
-                <a href="#support" class="hover:text-blue-600 transition">Support</a>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold tracking-wider uppercase text-gray-300">
+                <a href="#ecosystem" class="hover:text-blue-400 transition-colors">Products</a>
+                <a href="#developers" class="hover:text-blue-400 transition-colors">Developers</a>
+                <a href="#about" class="hover:text-blue-400 transition-colors">Company</a>
+                <a href="#research" class="hover:text-blue-400 transition-colors">Research</a>
+                <a href="#timeline" class="hover:text-blue-400 transition-colors">Roadmap</a>
+                <a href="#trust" class="hover:text-blue-400 transition-colors">Trust & Security</a>
             </nav>
 
-            <!-- Right actions -->
-            <div class="flex items-center gap-4">
-                <a href="#" class="hidden sm:inline-block text-sm font-semibold text-slate-600 hover:text-blue-600 transition">Sign In</a>
-                <a href="#products" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-slate-900 hover:bg-blue-600 shadow-lg shadow-slate-200 transition-all duration-300">Get Started</a>
-                <!-- Dark mode toggle (placeholder) -->
-                <button class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition flex items-center justify-center text-sm"><i class="fas fa-moon"></i></button>
+            <!-- Actions -->
+            <div class="flex items-center space-x-4">
+                <a href="https://stardustofficial.github.io/Stardust-hub/" target="_blank" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-lg shadow-blue-600/25 transition-all">
+                    Launch Hub Portal
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- ========== HERO ========== -->
-    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6 overflow-hidden hero-glow bg-grid">
-        <div class="max-w-6xl mx-auto relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-xs font-bold text-blue-700 tracking-wide mb-6">
-                        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                        <span>Global Production Infrastructure · v3.2</span>
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center bg-grid-pattern px-6 pt-12 pb-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10">
+            
+            <div class="lg:col-span-7 text-left space-y-8">
+                <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-blue-950/60 border border-blue-500/30 text-xs font-mono text-blue-400">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Next-Generation Decentralized Enterprise Architecture</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                    Engineering <br>
+                    <span class="animated-gradient-text">Digital Frontiers</span> <br>
+                    Without Limits.
+                </h1>
+
+                <p class="text-base sm:text-lg text-gray-400 max-w-2xl leading-relaxed font-normal">
+                    STARDUST is an autonomous multi-product ecosystem encompassing developer frameworks, real-time secure messaging, AI engine integration, trading suites, and immersive simulations.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
+                    <a href="#ecosystem" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-wider bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/30 transition-all flex items-center justify-center space-x-2">
+                        <span>Explore Applications</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="https://stardustofficial.github.io/Stardust-devloper-concel/" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-wider bg-gray-900 border border-gray-800 hover:bg-gray-800 text-gray-300 transition-all flex items-center justify-center space-x-2">
+                        <i data-lucide="terminal" class="w-4 h-4 text-blue-400"></i>
+                        <span>Developer Console</span>
+                    </a>
+                </div>
+
+                <!-- Verified Stats Bar -->
+                <div class="pt-8 border-t border-gray-800/80 grid grid-cols-3 gap-6 font-mono">
+                    <div>
+                        <div class="text-2xl font-black text-white">8+</div>
+                        <div class="text-xs text-gray-500">Live Services</div>
                     </div>
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] tracking-tight text-slate-900">
-                        Architecting Global <br />
-                        <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">Digital Platforms</span>
-                    </h1>
-                    <p class="text-base sm:text-lg text-slate-500 max-w-lg mt-6 font-medium leading-relaxed">
-                        STARDUST operates as an enterprise framework for high-throughput network applications, cloud infrastructure, and immersive interactive systems deployed globally.
-                    </p>
-                    <div class="flex flex-wrap gap-4 mt-8">
-                        <a href="#products" class="px-8 py-4 rounded-xl font-bold text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2">
-                            <span>Explore Ecosystem</span>
-                            <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
-                        <a href="#company" class="px-8 py-4 rounded-xl font-bold text-sm border border-slate-200 hover:border-blue-300 bg-white/80 text-slate-700 transition-all flex items-center gap-2">
-                            <i class="fas fa-play-circle text-blue-500"></i> Our Story
-                        </a>
+                    <div>
+                        <div class="text-2xl font-black text-white">100%</div>
+                        <div class="text-xs text-gray-500">Client Transparency</div>
                     </div>
-                    <!-- trust badges -->
-                    <div class="flex flex-wrap items-center gap-6 mt-10 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                        <span class="flex items-center gap-1.5"><i class="fas fa-shield-alt text-blue-500"></i> SOC2</span>
-                        <span class="flex items-center gap-1.5"><i class="fas fa-lock text-blue-500"></i> 256-bit</span>
-                        <span class="flex items-center gap-1.5"><i class="fas fa-globe text-blue-500"></i> 12 regions</span>
-                        <span class="flex items-center gap-1.5"><i class="fas fa-code text-blue-500"></i> Open core</span>
+                    <div>
+                        <div class="text-2xl font-black text-white">0.0ms</div>
+                        <div class="text-xs text-gray-500">Static CDN Latency</div>
                     </div>
                 </div>
-                <!-- Hero visual (3D globe abstraction) -->
-                <div class="relative flex justify-center items-center animate-float">
-                    <div class="w-72 h-72 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 border border-white/50 shadow-2xl shadow-blue-200/30 flex items-center justify-center relative">
-                        <div class="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffffff80,transparent)]"></div>
-                        <div class="w-48 h-48 md:w-64 md:h-64 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 opacity-10 blur-3xl"></div>
-                        <div class="relative z-10 text-center">
-                            <i class="fas fa-globe text-7xl text-blue-600/20"></i>
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 border-blue-400/30 rounded-full animate-spin-slow" style="animation: spin 20s linear infinite;"></div>
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-indigo-300/20 rounded-full animate-spin-slow" style="animation: spin 30s linear infinite reverse;"></div>
+            </div>
+
+            <!-- Hero Interactive Visual Terminal -->
+            <div class="lg:col-span-5 relative">
+                <div class="glass-card p-6 rounded-2xl relative z-10 space-y-6 border border-gray-800 shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
                         </div>
-                        <!-- floating dots -->
-                        <span class="absolute top-8 left-10 w-2 h-2 bg-blue-400 rounded-full shadow-lg shadow-blue-300"></span>
-                        <span class="absolute bottom-12 right-8 w-3 h-3 bg-indigo-400 rounded-full shadow-lg shadow-indigo-300"></span>
-                        <span class="absolute top-1/2 right-4 w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                        <div class="text-xs font-mono text-gray-500">stardust-core-node-v2.1</div>
+                    </div>
+
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="text-gray-400"><span class="text-emerald-400">root@stardust:~#</span> systemctl status stardust-grid</div>
+                        <div class="text-blue-400">● stardust-grid.service - Global Infrastructure Active</div>
+                        <div class="pl-4 text-gray-500">Loaded: loaded (/lib/systemd/system/stardust.service)</div>
+                        <div class="pl-4 text-gray-500">Active: active (running) since July 2026</div>
+                        <div class="pt-2 text-gray-400"><span class="text-emerald-400">root@stardust:~#</span> fetch --ecosystem-nodes</div>
+                        <div class="grid grid-cols-2 gap-2 pt-2">
+                            <div class="bg-gray-900/80 p-2 rounded border border-gray-800 text-[11px] text-gray-300">✓ Stardust X Messenger</div>
+                            <div class="bg-gray-900/80 p-2 rounded border border-gray-800 text-[11px] text-gray-300">✓ Developer Console</div>
+                            <div class="bg-gray-900/80 p-2 rounded border border-gray-800 text-[11px] text-gray-300">✓ Stardust AI Node</div>
+                            <div class="bg-gray-900/80 p-2 rounded border border-gray-800 text-[11px] text-gray-300">✓ Stardust Official Store</div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-blue-950/40 border border-blue-500/20 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="database" class="w-5 h-5 text-blue-400"></i>
+                            <span class="text-xs font-mono text-gray-300">Database Engine: Google Firebase</span>
+                        </div>
+                        <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded font-mono">Encrypted</span>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- animated gradient line -->
-        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-30"></div>
-    </section>
 
-    <!-- ========== STATS (real metrics) ========== -->
-    <section class="py-12 px-6 border-y border-slate-200/60 bg-white/50">
-        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div><div class="text-3xl font-black text-slate-900">12</div><div class="text-[11px] font-bold text-slate-400 tracking-widest uppercase">Active Products</div></div>
-            <div><div class="text-3xl font-black text-slate-900">8.2k</div><div class="text-[11px] font-bold text-slate-400 tracking-widest uppercase">Registered Users</div></div>
-            <div><div class="text-3xl font-black text-slate-900">46</div><div class="text-[11px] font-bold text-slate-400 tracking-widest uppercase">Countries Reached</div></div>
-            <div><div class="text-3xl font-black text-slate-900">32</div><div class="text-[11px] font-bold text-slate-400 tracking-widest uppercase">Open Source Projects</div></div>
         </div>
     </section>
 
-    <!-- ========== PRODUCTS / ECOSYSTEM ========== -->
-    <section id="products" class="py-24 px-6 max-w-7xl mx-auto">
+    <!-- Company Real Metrics -->
+    <section class="border-y border-gray-800/80 bg-gray-950/60 py-12 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-6 gap-6 text-center font-mono">
+            <div class="p-4 glass-card rounded-xl">
+                <div class="text-3xl font-extrabold text-blue-400">08+</div>
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Active Products</div>
+            </div>
+            <div class="p-4 glass-card rounded-xl">
+                <div class="text-3xl font-extrabold text-indigo-400">100%</div>
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">SSL Encrypted</div>
+            </div>
+            <div class="p-4 glass-card rounded-xl">
+                <div class="text-3xl font-extrabold text-purple-400">Global</div>
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Deploy Reach</div>
+            </div>
+            <div class="p-4 glass-card rounded-xl">
+                <div class="text-3xl font-extrabold text-cyan-400">Open</div>
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Source Standards</div>
+            </div>
+            <div class="p-4 glass-card rounded-xl">
+                <div class="text-3xl font-extrabold text-emerald-400">2024</div>
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Founded Year</div>
+            </div>
+            <div class="p-4 glass-card rounded-xl">
+                <div class="text-3xl font-extrabold text-pink-400">100%</div>
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">In-House Built</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Cards Section -->
+    <section id="ecosystem" class="py-28 px-6 max-w-7xl mx-auto">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <div><span class="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">Corporate Portfolio</span><h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-2">STARDUST Global Ecosystem</h2></div>
-            <p class="max-w-md text-sm text-slate-500 font-medium">Centralized cloud grid hosting analytical frameworks, system utilities, real-time automation nodes, and interactive simulation units.</p>
+            <div>
+                <span class="text-xs font-mono text-blue-400 uppercase tracking-widest font-semibold">Verified Corporate Infrastructure</span>
+                <h2 class="text-3xl sm:text-5xl font-black text-white mt-2">The Stardust Ecosystem</h2>
+            </div>
+            <p class="max-w-md text-sm text-gray-400">
+                A unified grid of high-performance web applications, developer platforms, utilities, and interactive entertainment modules.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- card 1: Utility -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600"><i class="fas fa-code text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Stardust Utility</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Advanced content formatting framework for cloud data processing.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="far fa-file-code mr-1"></i> v3.1</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/stardust-formatter/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-blue-600 hover:text-blue-800"><span>Launch Formatter</span><i class="fas fa-arrow-right text-xs"></i></a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Stardust X Messenger -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                            <i data-lucide="message-square" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">LIVE • v2.1</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Real-time Messaging</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-blue-400 transition-colors">Stardust X Messenger</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Encrypted real-time communication portal powered by Google Firebase backend infrastructure.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Web • Mobile</div>
+                </div>
+                <a href="https://stardustofficial.github.io/Stardust-X-messenger/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-blue-600 hover:text-white hover:border-blue-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Launch Messenger</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <!-- card 2: API -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600"><i class="fas fa-plug text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Developer API Engine</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Distributed system hosting endpoints and integration protocols.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="far fa-file-code mr-1"></i> v4.0</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/stardust-api/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-800"><span>Initialize API</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Stardust Store -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">LIVE</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Digital Marketplace</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-purple-400 transition-colors">Stardust Store</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Official centralized digital store for accessing ecosystem software, tools, and digital distributions.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Web App</div>
+                </div>
+                <a href="https://stardustofficial.github.io/Stardust-store/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-purple-600 hover:text-white hover:border-purple-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Explore Store</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <!-- card 3: AI -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600"><i class="fas fa-brain text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">BETA</span></div>
-                <h3 class="text-lg font-bold mt-4">Stardust AI</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">High-performance algorithmic computation terminal.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="far fa-file-code mr-1"></i> v2.0</span><span><i class="fas fa-cloud mr-1"></i> Cloud</span></div>
-                <a href="https://stardust-ai.onrender.com/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-purple-600 hover:text-purple-800"><span>Connect AI Node</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Developer Console -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                            <i data-lucide="terminal" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">LIVE</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Dev Tooling</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-indigo-400 transition-colors">Developer Console</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Unified terminal dashboard for monitoring network status, API endpoints, and platform logs.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Web Console</div>
+                </div>
+                <a href="https://stardustofficial.github.io/Stardust-devloper-concel/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Access Console</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <!-- card 4: Bot Portal -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600"><i class="fas fa-robot text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Stardust Bot Portal</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Central communication routing engine for community clusters.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="far fa-file-code mr-1"></i> v1.8</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-website/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-emerald-600 hover:text-emerald-800"><span>Access Dashboard</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Stardust AI Node -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">ACTIVE</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Intelligence Node</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-cyan-400 transition-colors">Stardust AI Engine</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Algorithmic machine learning computational engine handling interactive automated intelligence workflows.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Cloud Runtime</div>
+                </div>
+                <a href="https://stardust-ai.onrender.com/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-cyan-600 hover:text-white hover:border-cyan-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Connect to AI</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <!-- card 5: Starmedia -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600"><i class="fas fa-photo-video text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Starmedia</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">High-throughput streaming allocation matrix.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="far fa-file-code mr-1"></i> v2.3</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-media/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-amber-600 hover:text-amber-800"><span>Open Media Cluster</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Stardust Trader -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="trending-up" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">LIVE</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Financial Analytics</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-emerald-400 transition-colors">Stardust Trader</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Precision web terminal designed for real-time market data visual analysis and portfolio diagnostics.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Web Desktop</div>
+                </div>
+                <a href="https://stardustofficial.github.io/stardust-trader/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Open Trader Portal</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <!-- card 6: Roller Splash -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-pink-50 border border-pink-100 flex items-center justify-center text-pink-600"><i class="fas fa-gamepad text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Roller Splash Pro</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Advanced rendering physics canvas game platform.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="far fa-file-code mr-1"></i> v1.2</span><span><i class="fas fa-mobile-alt mr-1"></i> Android/Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-ball-game/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-pink-600 hover:text-pink-800"><span>Initialize Game</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Stardust Business Tycoon -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                            <i data-lucide="gamepad-2" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 border border-amber-500/30 text-amber-400 uppercase">SIMULATION</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Interactive Game</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-amber-400 transition-colors">Business Tycoon</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Strategic economic simulation engine crafted for testing business models and resource management mechanics.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Canvas Browser</div>
+                </div>
+                <a href="https://stardustofficial.github.io/Stardust-business-tycoon/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-amber-600 hover:text-white hover:border-amber-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Play Simulation</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <!-- NEW CARDS: Store, Developer Console, Business Tycoon, X Messenger, Hub, Trader -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-600"><i class="fas fa-store text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Stardust Store</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Digital marketplace for Stardust ecosystem assets.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="fas fa-shopping-bag mr-1"></i> v1.0</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-store/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-cyan-600 hover:text-cyan-800"><span>Visit Store</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Stardust Hub -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400">
+                            <i data-lucide="layers" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">PORTAL</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Central Gateway</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-pink-400 transition-colors">Stardust Hub</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Unified directory node connecting all products, subdomains, and developer resources in one grid.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Global Entrypoint</div>
+                </div>
+                <a href="https://stardustofficial.github.io/Stardust-hub/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-pink-600 hover:text-white hover:border-pink-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Enter Hub</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600"><i class="fas fa-terminal text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Developer Console</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Centralized dev tools and analytics dashboard.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="fas fa-code mr-1"></i> v2.0</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-devloper-concel/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-violet-600 hover:text-violet-800"><span>Open Console</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Stardust Utility (Formatter) -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-slate-500/10 border border-slate-500/30 flex items-center justify-center text-slate-300">
+                            <i data-lucide="file-code" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">UTILITY</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Data Parsing</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-slate-300 transition-colors">Stardust Formatter</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Advanced structural content formatting framework designed for cleaning operational data inputs.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Data Engine</div>
+                </div>
+                <a href="https://stardustofficial.github.io/stardust-formatter/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-slate-700 hover:text-white text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Launch Utility</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600"><i class="fas fa-chart-line text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Business Tycoon</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Strategic business simulation game.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="fas fa-gamepad mr-1"></i> v1.0</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-business-tycoon/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-rose-600 hover:text-rose-800"><span>Play Now</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Stardust API Node -->
+            <div class="glass-card p-8 rounded-2xl flex flex-col justify-between group relative overflow-hidden">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400">
+                            <i data-lucide="server" class="w-6 h-6"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 uppercase">API GRID</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Backend Systems</span>
+                    <h3 class="text-xl font-bold text-white mt-1 mb-3 group-hover:text-orange-400 transition-colors">Developer API Infrastructure</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                        Distributed routing endpoints and modular integration interfaces for modern frontend architecture.
+                    </p>
+                    <div class="text-[11px] font-mono text-gray-500 mb-6">Platform: Endpoint Grid</div>
+                </div>
+                <a href="https://stardustofficial.github.io/stardust-api/" target="_blank" class="w-full py-3 rounded-lg bg-gray-900 border border-gray-800 hover:bg-orange-600 hover:text-white hover:border-orange-500 text-xs font-bold text-center transition-all flex items-center justify-center space-x-2">
+                    <span>Explore Endpoints</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600"><i class="fas fa-comment-dots text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Stardust X Messenger</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Real-time secure messaging platform.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="fas fa-lock mr-1"></i> v2.1</span><span><i class="fas fa-mobile-alt mr-1"></i> Android/Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-X-messenger/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-sky-600 hover:text-sky-800"><span>Open Messenger</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+        </div>
+    </section>
+
+    <!-- Company Narrative Section (Mission, Vision, Story, Founder) -->
+    <section id="about" class="py-28 px-6 border-t border-gray-800/80 bg-gray-950/80 relative">
+        <div class="max-w-7xl mx-auto space-y-20">
+            
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-mono text-blue-400 uppercase tracking-widest font-semibold">Corporate Legacy</span>
+                <h2 class="text-3xl sm:text-5xl font-black text-white">About Stardust Ecosystem</h2>
+                <p class="text-gray-400 text-sm">Building world-class software single-handedly through passion, discipline, and code excellence.</p>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600"><i class="fas fa-cubes text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Stardust Hub</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Central portal for all Stardust services.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="fas fa-th-large mr-1"></i> v3.0</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/Stardust-hub/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-800"><span>Enter Hub</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Mission & Vision Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-card p-10 rounded-3xl space-y-4 border border-blue-500/20">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white">Our Mission</h3>
+                    <blockquote class="text-gray-300 italic text-base leading-relaxed border-l-2 border-blue-500 pl-4 font-normal">
+                        "To build a world-class, premium digital hub entirely from scratch, proving that true talent doesn't need a massive team—only an unstoppable mind."
+                    </blockquote>
+                </div>
+
+                <div class="glass-card p-10 rounded-3xl space-y-4 border border-purple-500/20">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                        <i data-lucide="eye" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white">Our Vision</h3>
+                    <blockquote class="text-gray-300 italic text-base leading-relaxed border-l-2 border-purple-500 pl-4 font-normal">
+                        "To connect creators and developers globally under the Stardust name, turning a solo portfolio project into a legendary worldwide tech brand."
+                    </blockquote>
+                </div>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 card-hover">
-                <div class="flex items-start justify-between"><div class="w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-600"><i class="fas fa-chart-pie text-sm"></i></div><span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span></div>
-                <h3 class="text-lg font-bold mt-4">Stardust Trader</h3>
-                <p class="text-slate-500 text-xs leading-relaxed mt-1">Advanced analytics and trading interface.</p>
-                <div class="flex items-center gap-3 mt-4 text-[10px] font-semibold text-slate-400"><span><i class="fas fa-chart-bar mr-1"></i> v1.5</span><span><i class="fas fa-globe mr-1"></i> Web</span></div>
-                <a href="https://stardustofficial.github.io/stardust-trader/" target="_blank" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-teal-600 hover:text-teal-800"><span>Launch Trader</span><i class="fas fa-arrow-right text-xs"></i></a>
+
+            <!-- Our Story Section -->
+            <div class="glass-card p-10 sm:p-14 rounded-3xl space-y-8 relative overflow-hidden">
+                <div class="flex items-center space-x-3 text-blue-400">
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
+                    <h3 class="text-2xl font-extrabold text-white">Our Story</h3>
+                </div>
+
+                <p class="text-gray-300 text-lg leading-relaxed max-w-4xl font-normal">
+                    "Stardust wasn't born in a fancy corporate office; it was born in a classroom from raw determination.
+                    When a 16-year-old student shared his dream of building a tech company, the world laughed, and his friends mocked him. But that skepticism became the ultimate fuel.
+                    Left entirely alone, he chose to speak through his code. Balancing Rank 1 school academics, sports, and sleepless nights of programming, he built the entire Stardust Ecosystem single-handedly. Today, Stardust is a proof that when you believe in yourself, the same world that laughed at you eventually stops to watch you shine."
+                </p>
+
+                <!-- Founder Badge -->
+                <div class="pt-8 border-t border-gray-800 flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 p-0.5">
+                        <div class="w-full h-full bg-gray-950 rounded-full flex items-center justify-center font-bold text-white text-lg">
+                            Z
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-extrabold text-white">Zishan</h4>
+                        <p class="text-xs text-blue-400 font-mono">Founder & Lead Architect, Stardust Ecosystem</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Company Roadmap / Timeline -->
+    <section id="timeline" class="py-28 px-6 max-w-5xl mx-auto">
+        <div class="text-center mb-20 space-y-3">
+            <span class="text-xs font-mono text-blue-400 uppercase tracking-widest font-semibold">Strategic Horizon</span>
+            <h2 class="text-3xl sm:text-5xl font-black text-white">Ecosystem Timeline</h2>
+        </div>
+
+        <div class="relative border-l border-gray-800 ml-4 sm:ml-32 space-y-12">
+            
+            <div class="relative pl-8 sm:pl-12 group">
+                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-gray-950 border-2 border-blue-500 group-hover:scale-125 transition-transform"></div>
+                <div class="absolute -left-28 top-1 hidden sm:block text-xs font-mono font-bold text-blue-400">2024</div>
+                <h4 class="text-lg font-bold text-white mb-1">Company Founded</h4>
+                <p class="text-gray-400 text-xs leading-relaxed">Initial core concept initialized. Initial repositories created on GitHub organization platform.</p>
+            </div>
+
+            <div class="relative pl-8 sm:pl-12 group">
+                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-gray-950 border-2 border-indigo-500 group-hover:scale-125 transition-transform"></div>
+                <div class="absolute -left-28 top-1 hidden sm:block text-xs font-mono font-bold text-indigo-400">2025</div>
+                <h4 class="text-lg font-bold text-white mb-1">First Product Release</h4>
+                <p class="text-gray-400 text-xs leading-relaxed">Deployment of Stardust Utility, Formatter engines, and custom game canvases online.</p>
+            </div>
+
+            <div class="relative pl-8 sm:pl-12 group">
+                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-gray-950 border-2 border-cyan-500 group-hover:scale-125 transition-transform"></div>
+                <div class="absolute -left-28 top-1 hidden sm:block text-xs font-mono font-bold text-cyan-400">2026</div>
+                <h4 class="text-lg font-bold text-white mb-1">Stardust AI & X Messenger Deploy</h4>
+                <p class="text-gray-400 text-xs leading-relaxed">Integration of Firebase authentication, cloud messaging platforms, and automated machine learning services.</p>
+            </div>
+
+            <div class="relative pl-8 sm:pl-12 group">
+                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-gray-950 border-2 border-purple-500 group-hover:scale-125 transition-transform"></div>
+                <div class="absolute -left-28 top-1 hidden sm:block text-xs font-mono font-bold text-purple-400">2027</div>
+                <h4 class="text-lg font-bold text-white mb-1">Stardust X Platform Evolution</h4>
+                <p class="text-gray-400 text-xs leading-relaxed">Next-generation cross-platform runtime for native mobile and desktop operating systems.</p>
+            </div>
+
+            <div class="relative pl-8 sm:pl-12 group">
+                <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-gray-950 border-2 border-emerald-500 group-hover:scale-125 transition-transform"></div>
+                <div class="absolute -left-28 top-1 hidden sm:block text-xs font-mono font-bold text-emerald-400">2028</div>
+                <h4 class="text-lg font-bold text-white mb-1">Global Expansion Grid</h4>
+                <p class="text-gray-400 text-xs leading-relaxed">Full decentralization and integration of enterprise developer portals globally.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Research Lab Section -->
+    <section id="research" class="py-28 px-6 bg-gray-950/90 border-t border-gray-800/80">
+        <div class="max-w-7xl mx-auto space-y-16">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">Stardust Research Labs</span>
+                    <h2 class="text-3xl sm:text-5xl font-black text-white mt-2">Next-Gen Tech Exploration</h2>
+                </div>
+                <p class="max-w-md text-sm text-gray-400">Dedicated theoretical and practical development in frontier engineering domains.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-2xl space-y-4">
+                    <i data-lucide="brain-circuit" class="w-8 h-8 text-cyan-400"></i>
+                    <h3 class="text-xl font-bold text-white">Future AI Systems</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Designing light-weight neural inference models capable of client-side execution in low-bandwidth environments.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl space-y-4">
+                    <i data-lucide="cloud-cog" class="w-8 h-8 text-blue-400"></i>
+                    <h3 class="text-xl font-bold text-white">Stateless Cloud Grids</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Optimizing serverless edge routing architectures to achieve near-zero system overhead and instant sync.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl space-y-4">
+                    <i data-lucide="shield-alert" class="w-8 h-8 text-emerald-400"></i>
+                    <h3 class="text-xl font-bold text-white">Zero-Trust Cryptography</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Implementing end-to-end user data isolation frameworks utilizing hardened Firebase authentication standards.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== ABOUT (Mission, Vision, Story) ========== -->
-    <section id="company" class="py-24 px-6 bg-white border-y border-slate-200/60">
-        <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16"><span class="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">About Stardust</span><h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-2">Our Mission · Vision · Story</h2></div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-slate-50/80 p-8 rounded-2xl border border-slate-200"><div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4"><i class="fas fa-bullseye text-xl"></i></div><h4 class="text-lg font-bold">Mission</h4><p class="text-sm text-slate-600 mt-2 leading-relaxed">"To build a world-class, premium digital hub entirely from scratch, proving that true talent doesn't need a massive team—only an unstoppable mind."</p></div>
-                <div class="bg-slate-50/80 p-8 rounded-2xl border border-slate-200"><div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4"><i class="fas fa-eye text-xl"></i></div><h4 class="text-lg font-bold">Vision</h4><p class="text-sm text-slate-600 mt-2 leading-relaxed">"To connect creators and developers globally under the Stardust name, turning a solo portfolio project into a legendary worldwide tech brand."</p></div>
-                <div class="bg-slate-50/80 p-8 rounded-2xl border border-slate-200"><div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-4"><i class="fas fa-book-open text-xl"></i></div><h4 class="text-lg font-bold">Our Story</h4><p class="text-sm text-slate-600 mt-2 leading-relaxed">"Stardust wasn't born in a fancy corporate office; it was born in a classroom from raw determination. When a 16-year-old student shared his dream of building a tech company, the world laughed. Left entirely alone, he chose to speak through his code. Today, Stardust is proof that when you believe in yourself, the same world that laughed at you eventually stops to watch you shine."</p></div>
+    <!-- Trust & Transparency (Legal & Security Section) -->
+    <section id="trust" class="py-28 px-6 max-w-7xl mx-auto space-y-16">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+            <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold">Security & Protocol</span>
+            <h2 class="text-3xl sm:text-5xl font-black text-white">Built On Trust & Security</h2>
+            <p class="text-gray-400 text-sm">Transparency in cloud backend handling, privacy protection, and service terms.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <!-- Privacy Policy Container -->
+            <div class="glass-card p-8 rounded-2xl space-y-6 border border-gray-800">
+                <div class="flex items-center space-x-3 text-emerald-400">
+                    <i data-lucide="lock" class="w-6 h-6"></i>
+                    <h3 class="text-xl font-bold text-white">Privacy Policy</h3>
+                </div>
+                <div class="text-xs font-mono text-gray-500">Effective Date: July 2026</div>
+
+                <div class="space-y-4 text-xs text-gray-300 leading-relaxed max-h-80 overflow-y-auto pr-2 space-y-4">
+                    <p>Welcome to the Stardust Ecosystem (including Stardust Store and Stardust X Messenger). Your privacy is of paramount importance to us. This Privacy Policy details how we handle, store, and protect user data via our modern cloud infrastructure.</p>
+                    
+                    <h4 class="font-bold text-white text-sm">1. Information We Collect</h4>
+                    <p>When you interact with our authenticated applications, we collect standard credentials including Email addresses, usernames, and passwords provided during registration. User-generated content such as real-time messages are securely processed.</p>
+
+                    <h4 class="font-bold text-white text-sm">2. Cloud Infrastructure & Security</h4>
+                    <p>We utilize Google Firebase as our primary cloud database. Credentials are stored securely using SSL/TLS encryption. Passwords are automatically hashed via Firebase Authentication, ensuring no raw passwords can be viewed by anyone.</p>
+
+                    <h4 class="font-bold text-white text-sm">3. Retention & Deletion</h4>
+                    <p>Data is retained only as long as your account remains active. Users retain the full right to request deletion of their account records by contacting support.</p>
+                </div>
+            </div>
+
+            <!-- Terms of Service Container -->
+            <div class="glass-card p-8 rounded-2xl space-y-6 border border-gray-800">
+                <div class="flex items-center space-x-3 text-blue-400">
+                    <i data-lucide="file-text" class="w-6 h-6"></i>
+                    <h3 class="text-xl font-bold text-white">Terms of Service</h3>
+                </div>
+                <div class="text-xs font-mono text-gray-500">Effective Date: July 2026</div>
+
+                <div class="space-y-4 text-xs text-gray-300 leading-relaxed max-h-80 overflow-y-auto pr-2 space-y-4">
+                    <p>By accessing or using the Stardust Store, Stardust X Messenger, or associated platform managed under stardustofficial, you agree to comply with these terms.</p>
+                    
+                    <h4 class="font-bold text-white text-sm">1. Acceptance & Conduct</h4>
+                    <p>Users must be at least 13 years of age. You agree strictly NOT to transmit spam, execute cyber-attacks against our Firebase infrastructure, or impersonate lead developer Zishan.</p>
+
+                    <h4 class="font-bold text-white text-sm">2. Intellectual Property</h4>
+                    <p>All custom frontend designs, layouts, UI assets, and branding names are the intellectual property of Zishan (stardustofficial). Repository forks are allowed for open-source exploration under GitHub guidelines.</p>
+
+                    <h4 class="font-bold text-white text-sm">3. Limitation of Liability</h4>
+                    <p>The Stardust Ecosystem is provided on an "as-is" portfolio framework ensuring 100% data safety practices while operating over GitHub/Firebase hosting.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Support & Official Contact Section -->
+    <section class="py-20 px-6 bg-gradient-to-b from-gray-950 to-blue-950/40 border-t border-gray-800">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <div class="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 mx-auto">
+                <i data-lucide="mail" class="w-8 h-8"></i>
+            </div>
+            
+            <h2 class="text-3xl sm:text-4xl font-black text-white">Have Questions or Business Inquiries?</h2>
+            <p class="text-gray-400 text-sm max-w-xl mx-auto">
+                Reach out to our official support team or direct your inquiry to lead developer Zishan.
+            </p>
+
+            <div class="inline-flex items-center space-x-3 bg-gray-900 border border-gray-800 px-6 py-4 rounded-2xl font-mono text-sm sm:text-base text-blue-400 hover:border-blue-500 transition-colors">
+                <i data-lucide="send" class="w-5 h-5"></i>
+                <a href="mailto:support.stardustofficial@gmail.com" class="hover:underline">support.stardustofficial@gmail.com</a>
             </div>
         </div>
     </section>
 
-    <!-- ========== TIMELINE / NEWS ========== -->
-    <section id="news" class="py-24 px-6 max-w-4xl mx-auto">
-        <div class="text-center mb-16"><span class="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">Press & Timeline</span><h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-2">Corporate Releases</h2></div>
-        <div class="relative border-l border-slate-200 ml-4 sm:ml-6 space-y-12">
-            <div class="relative pl-8 group"><div class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-blue-600 group-hover:bg-blue-600 transition-colors"></div><div class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mb-1">Oct 24, 2026</div><h4 class="text-lg font-bold text-slate-900">STARDUST Global Ecosystem Architecture Complete</h4><p class="text-slate-500 text-sm font-medium">Infrastructure optimization patch deployed across all regional static clusters. Verification protocols successful.</p></div>
-            <div class="relative pl-8 group"><div class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-slate-300 group-hover:border-blue-600 transition-colors"></div><div class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mb-1">Jun 28, 2026</div><h4 class="text-lg font-bold text-slate-900">STARDUST Hub Architecture Deployed Online</h4><p class="text-slate-500 text-sm font-medium">Principal enterprise portal cluster active under formal validation. Scalability metrics baseline integrity.</p></div>
-            <div class="relative pl-8 group"><div class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-slate-300 group-hover:border-blue-600 transition-colors"></div><div class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mb-1">Mar 10, 2026</div><h4 class="text-lg font-bold text-slate-900">Stardust AI Beta Launches</h4><p class="text-slate-500 text-sm font-medium">High-performance algorithmic computation terminal now available for enterprise testing.</p></div>
-        </div>
-    </section>
-
-    <!-- ========== RESEARCH ========== -->
-    <section id="research" class="py-24 px-6 bg-slate-50/60 border-y border-slate-200/60">
-        <div class="max-w-6xl mx-auto text-center"><span class="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">Innovation Lab</span><h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-2">Stardust Research</h2><p class="text-slate-500 max-w-2xl mx-auto mt-4">Exploring the frontiers of AI, robotics, AR/VR, cloud infrastructure, and next-gen operating systems.</p>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-12">
-                <div class="bg-white p-6 rounded-xl border border-slate-200"><i class="fas fa-robot text-3xl text-blue-500 mb-2"></i><div class="text-xs font-bold uppercase tracking-wider">AI</div></div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200"><i class="fas fa-microchip text-3xl text-indigo-500 mb-2"></i><div class="text-xs font-bold uppercase tracking-wider">Robotics</div></div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200"><i class="fas fa-vr-cardboard text-3xl text-purple-500 mb-2"></i><div class="text-xs font-bold uppercase tracking-wider">AR/VR</div></div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200"><i class="fas fa-cloud text-3xl text-cyan-500 mb-2"></i><div class="text-xs font-bold uppercase tracking-wider">Cloud</div></div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200"><i class="fas fa-laptop-code text-3xl text-rose-500 mb-2"></i><div class="text-xs font-bold uppercase tracking-wider">OS</div></div>
+    <!-- Corporate Footer -->
+    <footer class="border-t border-gray-800/80 bg-gray-950 py-16 px-6 text-xs text-gray-400 font-sans">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
+            
+            <!-- Brand Info -->
+            <div class="md:col-span-2 space-y-4">
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-blue-400"></i>
+                    <span class="text-lg font-black text-white uppercase tracking-wider">STARDUST</span>
+                </div>
+                <p class="text-gray-500 text-xs max-w-sm leading-relaxed">
+                    A global digital technology ecosystem architected single-handedly from scratch. Delivering premium software, cloud engines, and interactive applications.
+                </p>
+                <div class="text-[11px] font-mono text-gray-500">
+                    Lead Developer & Founder: <strong class="text-white">Zishan</strong>
+                </div>
             </div>
-        </div>
-    </section>
 
-    <!-- ========== SUPPORT & CONTACT ========== -->
-    <section id="support" class="py-24 px-6 max-w-4xl mx-auto">
-        <div class="text-center mb-12"><span class="text-xs font-bold uppercase tracking-[0.25em] text-blue-600">Contact</span><h2 class="text-3xl font-black text-slate-900 mt-2">Get in Touch</h2></div>
-        <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-            <div class="grid md:grid-cols-2 gap-8">
-                <div><h4 class="font-bold text-slate-900">General Support</h4><a href="mailto:support.stardustofficial@gmail.com" class="text-blue-600 font-medium text-sm">support.stardustofficial@gmail.com</a><div class="mt-4 text-sm text-slate-500"><i class="fas fa-map-pin mr-2"></i> Global HQ · Digital</div></div>
-                <div><h4 class="font-bold text-slate-900">Quick Links</h4><div class="flex flex-wrap gap-3 text-sm"><a href="#" class="text-slate-600 hover:text-blue-600"><i class="fab fa-github mr-1"></i> GitHub</a><a href="#" class="text-slate-600 hover:text-blue-600"><i class="fab fa-linkedin mr-1"></i> LinkedIn</a><a href="#" class="text-slate-600 hover:text-blue-600"><i class="fab fa-discord mr-1"></i> Discord</a></div></div>
+            <!-- Ecosystem Links -->
+            <div class="space-y-3">
+                <h4 class="font-mono text-xs uppercase text-white font-bold tracking-wider">Ecosystem</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><a href="https://stardustofficial.github.io/Stardust-X-messenger/" target="_blank" class="hover:text-blue-400 transition-colors">X Messenger</a></li>
+                    <li><a href="https://stardustofficial.github.io/Stardust-store/" target="_blank" class="hover:text-blue-400 transition-colors">Stardust Store</a></li>
+                    <li><a href="https://stardustofficial.github.io/stardust-trader/" target="_blank" class="hover:text-blue-400 transition-colors">Stardust Trader</a></li>
+                    <li><a href="https://stardust-ai.onrender.com/" target="_blank" class="hover:text-blue-400 transition-colors">Stardust AI Engine</a></li>
+                </ul>
             </div>
-            <!-- Privacy & Terms links (quick) -->
-            <div class="mt-8 pt-6 border-t border-slate-200 text-xs text-slate-400 flex flex-wrap gap-6">
-                <a href="#" class="hover:text-blue-600">Privacy Policy</a>
-                <a href="#" class="hover:text-blue-600">Terms of Service</a>
-                <a href="#" class="hover:text-blue-600">Security</a>
-                <a href="#" class="hover:text-blue-600">Responsible AI</a>
-            </div>
-        </div>
-    </section>
 
-    <!-- ========== FOOTER ========== -->
-    <footer class="border-t border-slate-200 bg-white py-16 px-6">
-        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
-            <div><h5 class="font-bold text-slate-900 uppercase text-xs tracking-widest">Products</h5><ul class="mt-4 space-y-2 text-slate-500"><li>Stardust Utility</li><li>Stardust AI</li><li>Stardust X Messenger</li><li>Stardust Store</li></ul></div>
-            <div><h5 class="font-bold text-slate-900 uppercase text-xs tracking-widest">Company</h5><ul class="mt-4 space-y-2 text-slate-500"><li>About</li><li>Careers</li><li>Press</li><li>Research</li></ul></div>
-            <div><h5 class="font-bold text-slate-900 uppercase text-xs tracking-widest">Developers</h5><ul class="mt-4 space-y-2 text-slate-500"><li>API</li><li>Console</li><li>Open Source</li><li>Documentation</li></ul></div>
-            <div><h5 class="font-bold text-slate-900 uppercase text-xs tracking-widest">Legal</h5><ul class="mt-4 space-y-2 text-slate-500"><li>Privacy</li><li>Terms</li><li>Cookies</li><li>Licenses</li></ul></div>
+            <!-- Developer Links -->
+            <div class="space-y-3">
+                <h4 class="font-mono text-xs uppercase text-white font-bold tracking-wider">Developers</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><a href="https://stardustofficial.github.io/Stardust-devloper-concel/" target="_blank" class="hover:text-blue-400 transition-colors">Developer Console</a></li>
+                    <li><a href="https://stardustofficial.github.io/stardust-api/" target="_blank" class="hover:text-blue-400 transition-colors">API Infrastructure</a></li>
+                    <li><a href="https://stardustofficial.github.io/stardust-formatter/" target="_blank" class="hover:text-blue-400 transition-colors">Data Formatter</a></li>
+                    <li><a href="https://github.com/stardustofficial" target="_blank" class="hover:text-blue-400 transition-colors">GitHub Repositories</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal & Support -->
+            <div class="space-y-3">
+                <h4 class="font-mono text-xs uppercase text-white font-bold tracking-wider">Support & Legal</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><a href="#trust" class="hover:text-blue-400 transition-colors">Privacy Policy</a></li>
+                    <li><a href="#trust" class="hover:text-blue-400 transition-colors">Terms of Service</a></li>
+                    <li><a href="mailto:support.stardustofficial@gmail.com" class="hover:text-blue-400 transition-colors">Contact Support</a></li>
+                    <li><a href="#about" class="hover:text-blue-400 transition-colors">Founder Message</a></li>
+                </ul>
+            </div>
+
         </div>
-        <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
-            <span>&copy; 2026 STARDUST Inc. All international rights reserved.</span>
-            <span class="flex items-center gap-2"><i class="fas fa-code text-blue-500"></i> Made by <span class="text-blue-600 font-bold">Zishan</span></span>
+
+        <div class="max-w-7xl mx-auto pt-8 border-t border-gray-900 flex flex-col md:flex-row items-center justify-between font-mono text-[11px] text-gray-500 gap-4">
+            <div>
+                &copy; 2026 STARDUST Ecosystem. Built by Zishan. All rights reserved.
+            </div>
+            <div class="flex items-center space-x-4">
+                <span>Infrastructure: Firebase & GitHub</span>
+                <span>•</span>
+                <span class="text-emerald-400">Status: Operational</span>
+            </div>
         </div>
     </footer>
 
-    <!-- tiny scroll animation -->
-    <script>document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})})</script>
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
