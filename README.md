@@ -1,7 +1,5 @@
-# Stardust official
-
 # Hi there, I'm Zishan 👋 
-### 🚀 Founder & Lead Developer at **STARDUST CORPORATION**
+### 🚀 Founder & Lead Developer at **STARDUST OFFICIAL**
 
 <p align="left">
   <img src="https://img.shields.io/badge/Focus-Fullstack_%26_Cloud_Infrastructure-blue?style=for-the-badge&logo=github" />
@@ -12,11 +10,11 @@
 ---
 
 ## 🌟 About Me
-I am a passionate Systems Architect and Full-Stack Developer dedicated to building high-performance web applications, developer tooling, and cloud-driven platforms. 
+I am a passionate Systems Architect and Full-Stack Developer dedicated to building high-performance web applications, developer tooling, media platforms, and cloud-driven systems.
 
-As the sole architect behind the **Stardust Ecosystem**, I focus on crafting sleek user interfaces, real-time communication systems, and scalable cloud infrastructure. My goal is to bridge complex backend engineering with seamless, enterprise-grade user experiences.
+As the sole architect behind the **Stardust Ecosystem**, I focus on crafting sleek user interfaces, real-time communication tools, APIs, and scalable infrastructure.
 
-- 🛠️ **Currently Building:** Expanding the Stardust Ecosystem (AI Engine & Real-time Messaging).
+- 🛠️ **Currently Building:** Expanding the Stardust Ecosystem (AI, Stardust X messenger, Stardust hub & Media Engine).
 - ⚡ **Core Philosophy:** High performance, pristine UI/UX, and zero-compromise security.
 - 🎯 **Open for:** High-impact engineering roles, collaborative open-source projects, and technical advisories.
 
@@ -36,38 +34,38 @@ As the sole architect behind the **Stardust Ecosystem**, I focus on crafting sle
 
 ---
 
-## 🛸 The Stardust Ecosystem (Featured Projects)
+## 🛸 The Stardust Ecosystem (12 Live Applications)
 
-Here are the core production applications engineered under the **Stardust** umbrella:
+Below is the complete portfolio of web applications, platforms, APIs, and games engineered under the **Stardust** umbrella:
 
+### 🌐 Core Platforms & Ecosystem
 | Product | Type | Description | Link |
 | :--- | :--- | :--- | :--- |
-| **Stardust Store** | Digital Hub | Centralized marketplace for accessing suite software. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-store/) |
-| **Stardust X Messenger** | Encrypted Chat | Real-time messaging platform powered by Firebase backend. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-X-messenger/) |
-| **Developer Console** | Dev Tools | Endpoint diagnostic dashboard and developer logs. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-devloper-concel/) |
-| **Stardust AI Engine** | Machine Intel | Automated computational AI engine deployed on Render. | [Live Demo ↗](https://stardust-ai.onrender.com/) |
-| **Stardust Trader** | Market Analytics | Real-time analytical web terminal for trade diagnostics. | [Live Demo ↗](https://stardustofficial.github.io/stardust-trader/) |
-| **Business Tycoon** | Simulation | Browser canvas-based economic management game engine. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-business-tycoon/) |
+| **Stardust Portal** | Global Portal | Main ecosystem directory & infrastructure portal. | [Live Demo ↗](https://stardustofficial.github.io/Stardustofficial/#ecosystem) |
+| **Stardust Hub** | Central Hub | Unified control hub for ecosystem navigation. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-hub/) |
+| **Stardust Store** | Digital Hub | Centralized marketplace for ecosystem applications. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-store/) |
+| **Starmedia** | Media Engine | Digital media, streaming, and content platform. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-media/) |
 
-| **Stardust utility** 
-(https://stardustofficial.github.io/stardust-formatter/) |
+### 🛠️ Developer Tools, Utilities & Bots
+| Product | Type | Description | Link |
+| :--- | :--- | :--- | :--- |
+| **Developer API** | API Portal | Public & developer endpoints suite. | [Live Demo ↗](https://stardustofficial.github.io/stardust-api/) |
+| **Stardust Utility** | Formatter Tool | Utility, code formatting, and developer tools. | [Live Demo ↗](https://stardustofficial.github.io/stardust-formatter/) |
+| **Developer Console** | Dev Suite | Real-time diagnostic console and network logs. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-devloper-concel/) |
+| **Discord Bot Portal**| Community Bot | Management suite and dashboard for Discord bot. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-website/) |
 
-| **Stardust devloper api**
-(https://stardustofficial.github.io/stardust-api/) |
+### 💬 Communication, AI & Analytics
+| Product | Type | Description | Link |
+| :--- | :--- | :--- | :--- |
+| **Stardust X Messenger** | Encrypted Chat | Real-time messaging platform using Firebase authentication. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-X-messenger/) |
+| **Stardust AI Engine** | Machine Intel | Autonomous machine intelligence platform deployed on Render. | [Live Demo ↗](https://stardust-ai.onrender.com/) |
+| **Stardust Trader** | Market Analytics | Real-time analytics and trading asset diagnostic tool. | [Live Demo ↗](https://stardustofficial.github.io/stardust-trader/) |
 
-
-| **Stardust discord bot** 
-(https://stardustofficial.github.io/Stardust-website/) |
-
-| **Starmedia**
-(https://stardustofficial.github.io/Stardust-media/) |
-
-| **Stardust rollar splash pro**
-(https://stardustofficial.github.io/Stardust-ball-game/) |
-
-
-| **Stardust hub**
-(https://stardustofficial.github.io/Stardust-hub/) |
+### 🎮 Web Games & Interactive Simulation
+| Product | Type | Description | Link |
+| :--- | :--- | :--- | :--- |
+| **Roller Splash Pro** | Arcade Game | Interactive physics-based ball game engine. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-ball-game/) |
+| **Business Tycoon** | Simulation | Browser canvas-based business simulation engine. | [Live Demo ↗](https://stardustofficial.github.io/Stardust-business-tycoon/) |
 
 ---
 
@@ -82,8 +80,8 @@ Here are the core production applications engineered under the **Stardust** umbr
 
 ## 🌐 Connect With Me
 
+- 🌐 **Global Portal:** [Stardust Portal Ecosystem](https://stardustofficial.github.io/Stardustofficial/#ecosystem)
 - 💼 **Official Support:** [support.stardustofficial@gmail.com](mailto:support.stardustofficial@gmail.com)
-- 🌐 **Global Portal:** [Stardust Website](https://stardustofficial.github.io/)
 - 💻 **GitHub:** [@stardustofficial](https://github.com/stardustofficial)
 
 <br/>
