@@ -41,11 +41,100 @@
             backdrop-filter: blur(8px);
             background-color: rgba(15, 23, 42, 0.4);
         }
+
+        /* Social Dropdown Styles */
+        .social-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .social-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #ffffff;
+            min-width: 220px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 12px;
+            z-index: 50;
+            margin-top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .social-dropdown-content.show {
+            display: block;
+            animation: fadeInDown 0.25s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .social-link-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .social-link-item:hover {
+            background-color: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        .social-link-item .icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .social-link-item .icon-wrap svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .social-link-item .label {
+            flex: 1;
+        }
+
+        .social-link-item .badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .social-link-item:hover .badge {
+            background: #cbd5e1;
+        }
     </style>
 </head>
 <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- Main Navigation Bar (removed top status bar) -->
+    <!-- Main Navigation Bar -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             
@@ -60,7 +149,7 @@
                 </div>
             </a>
 
-            <!-- Navigation Links (removed old nav, added Ecosystem) -->
+            <!-- Navigation Links -->
             <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-wider uppercase text-slate-600">
                 <a href="#ecosystem" class="hover:text-blue-600 transition-colors">Products</a>
                 <a href="#developers" class="hover:text-blue-600 transition-colors">Developers</a>
@@ -69,8 +158,44 @@
                 <a href="#full-ecosystem" class="hover:text-blue-600 transition-colors bg-blue-50 px-4 py-2 rounded-full text-blue-700 border border-blue-200">Ecosystem</a>
             </nav>
 
-            <!-- Right Menu Drawer Button -->
-            <div class="flex items-center space-x-4">
+            <!-- Right Menu & Social Dropdown -->
+            <div class="flex items-center space-x-3">
+                <!-- Social Dropdown Button -->
+                <div class="social-dropdown">
+                    <button onclick="toggleSocialDropdown()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all shadow-md shadow-blue-500/20 cursor-pointer border border-blue-700">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        <span>Join Community</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div id="socialDropdown" class="social-dropdown-content">
+                        <!-- GitHub -->
+                        <a href="https://github.com/stardustofficial" target="_blank" class="social-link-item">
+                            <span class="icon-wrap bg-slate-100 text-slate-800"><i data-lucide="github"></i></span>
+                            <span class="label">GitHub</span>
+                            <span class="badge">Follow</span>
+                        </a>
+                        <!-- Discord -->
+                        <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="social-link-item">
+                            <span class="icon-wrap bg-indigo-100 text-indigo-600"><i data-lucide="discord"></i></span>
+                            <span class="label">Discord</span>
+                            <span class="badge">Join</span>
+                        </a>
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="social-link-item">
+                            <span class="icon-wrap bg-blue-100 text-blue-700"><i data-lucide="linkedin"></i></span>
+                            <span class="label">LinkedIn</span>
+                            <span class="badge">Follow</span>
+                        </a>
+                        <!-- X (Twitter) -->
+                        <a href="https://x.com/zishanstardust" target="_blank" class="social-link-item">
+                            <span class="icon-wrap bg-black/5 text-black"><i data-lucide="twitter"></i></span>
+                            <span class="label">X (Twitter)</span>
+                            <span class="badge">Follow</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Company Directory Drawer Button -->
                 <button onclick="toggleMenu()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all cursor-pointer">
                     <i data-lucide="menu" class="w-4 h-4 text-blue-600"></i>
                     <span>Company Directory</span>
@@ -143,20 +268,38 @@
                     </button>
                 </div>
 
-                <!-- Support / Social section inside menu -->
+                <!-- Support & Community - UPDATED with all 4 social links -->
                 <div class="space-y-3 pt-4 border-t border-slate-100">
                     <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Support & Community</div>
+                    
+                    <!-- Email Support -->
                     <a href="mailto:support.stardustofficial@gmail.com" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
                         <i data-lucide="mail" class="w-5 h-5 text-blue-600"></i>
                         <span class="text-sm font-medium text-slate-700">Email Support</span>
                     </a>
+
+                    <!-- GitHub -->
                     <a href="https://github.com/stardustofficial" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
                         <i data-lucide="github" class="w-5 h-5 text-slate-800"></i>
                         <span class="text-sm font-medium text-slate-700">GitHub</span>
                     </a>
+
+                    <!-- Discord -->
                     <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
                         <i data-lucide="discord" class="w-5 h-5 text-indigo-500"></i>
                         <span class="text-sm font-medium text-slate-700">Discord</span>
+                    </a>
+
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                        <i data-lucide="linkedin" class="w-5 h-5 text-blue-700"></i>
+                        <span class="text-sm font-medium text-slate-700">LinkedIn</span>
+                    </a>
+
+                    <!-- X (Twitter) -->
+                    <a href="https://x.com/zishanstardust" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                        <i data-lucide="twitter" class="w-5 h-5 text-black"></i>
+                        <span class="text-sm font-medium text-slate-700">X (Twitter)</span>
                     </a>
                 </div>
             </div>
@@ -475,8 +618,8 @@
                     A world-class digital ecosystem designed and built single-handedly by Zishan.
                 </p>
                 <div>Official Support Email: <a href="mailto:support.stardustofficial@gmail.com" class="text-blue-400 font-bold hover:underline">support.stardustofficial@gmail.com</a></div>
-                <!-- social links in footer -->
-                <div class="flex items-center space-x-4 pt-2">
+                <!-- Footer Social Links - UPDATED with all 4 -->
+                <div class="flex items-center space-x-4 pt-2 flex-wrap gap-y-2">
                     <a href="https://github.com/stardustofficial" target="_blank" class="flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
                         <i data-lucide="github" class="w-4 h-4"></i>
                         <span>GitHub</span>
@@ -484,6 +627,14 @@
                     <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
                         <i data-lucide="discord" class="w-4 h-4"></i>
                         <span>Discord</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://x.com/zishanstardust" target="_blank" class="flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="twitter" class="w-4 h-4"></i>
+                        <span>X</span>
                     </a>
                 </div>
             </div>
@@ -507,6 +658,8 @@
                     <h4 class="font-bold text-white uppercase font-mono text-[10px]">Community</h4>
                     <a href="https://github.com/stardustofficial" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="github" class="w-3.5 h-3.5"></i><span>GitHub</span></a>
                     <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="discord" class="w-3.5 h-3.5"></i><span>Discord</span></a>
+                    <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="linkedin" class="w-3.5 h-3.5"></i><span>LinkedIn</span></a>
+                    <a href="https://x.com/zishanstardust" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="twitter" class="w-3.5 h-3.5"></i><span>X</span></a>
                 </div>
             </div>
 
@@ -582,6 +735,20 @@
             const drawer = document.getElementById('sideDrawer');
             drawer.classList.toggle('hidden');
         }
+
+        function toggleSocialDropdown() {
+            const dropdown = document.getElementById('socialDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('socialDropdown');
+            const button = event.target.closest('.social-dropdown');
+            if (!button) {
+                dropdown.classList.remove('show');
+            }
+        });
 
         function openEmbed(key) {
             const modal = document.getElementById('embedModal');
