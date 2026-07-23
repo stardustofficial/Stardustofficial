@@ -42,93 +42,49 @@
             background-color: rgba(15, 23, 42, 0.4);
         }
 
-        /* Social Dropdown Styles */
-        .social-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .social-dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #ffffff;
-            min-width: 220px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 12px;
+        /* Side Drawer - Fixed positioning so only drawer scrolls */
+        #sideDrawer {
+            position: fixed;
+            inset: 0;
             z-index: 50;
-            margin-top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
+            display: none;
+            overflow: hidden;
         }
 
-        .social-dropdown-content.show {
-            display: block;
-            animation: fadeInDown 0.25s ease-out;
+        #sideDrawer .drawer-backdrop {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        .social-link-item {
+        #sideDrawer .drawer-content {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            box-shadow: -8px 0 30px rgba(0, 0, 0, 0.12);
+            border-left: 1px solid #e2e8f0;
             display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 10px 14px;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            color: #1e293b;
-            font-weight: 500;
-            font-size: 0.875rem;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
-        .social-link-item:hover {
-            background-color: #f1f5f9;
-            transform: translateX(4px);
+        .drawer-content::-webkit-scrollbar {
+            width: 4px;
         }
 
-        .social-link-item .icon-wrap {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+        .drawer-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
         }
 
-        .social-link-item .icon-wrap svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .social-link-item .label {
-            flex: 1;
-        }
-
-        .social-link-item .badge {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 2px 10px;
-            border-radius: 20px;
-            background: #e2e8f0;
-            color: #475569;
-        }
-
-        .social-link-item:hover .badge {
+        .drawer-content::-webkit-scrollbar-thumb {
             background: #cbd5e1;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -158,44 +114,8 @@
                 <a href="#full-ecosystem" class="hover:text-blue-600 transition-colors bg-blue-50 px-4 py-2 rounded-full text-blue-700 border border-blue-200">Ecosystem</a>
             </nav>
 
-            <!-- Right Menu & Social Dropdown -->
-            <div class="flex items-center space-x-3">
-                <!-- Social Dropdown Button -->
-                <div class="social-dropdown">
-                    <button onclick="toggleSocialDropdown()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all shadow-md shadow-blue-500/20 cursor-pointer border border-blue-700">
-                        <i data-lucide="users" class="w-4 h-4"></i>
-                        <span>Join Community</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                    </button>
-                    <div id="socialDropdown" class="social-dropdown-content">
-                        <!-- GitHub -->
-                        <a href="https://github.com/stardustofficial" target="_blank" class="social-link-item">
-                            <span class="icon-wrap bg-slate-100 text-slate-800"><i data-lucide="github"></i></span>
-                            <span class="label">GitHub</span>
-                            <span class="badge">Follow</span>
-                        </a>
-                        <!-- Discord -->
-                        <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="social-link-item">
-                            <span class="icon-wrap bg-indigo-100 text-indigo-600"><i data-lucide="discord"></i></span>
-                            <span class="label">Discord</span>
-                            <span class="badge">Join</span>
-                        </a>
-                        <!-- LinkedIn -->
-                        <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="social-link-item">
-                            <span class="icon-wrap bg-blue-100 text-blue-700"><i data-lucide="linkedin"></i></span>
-                            <span class="label">LinkedIn</span>
-                            <span class="badge">Follow</span>
-                        </a>
-                        <!-- X (Twitter) -->
-                        <a href="https://x.com/zishanstardust" target="_blank" class="social-link-item">
-                            <span class="icon-wrap bg-black/5 text-black"><i data-lucide="twitter"></i></span>
-                            <span class="label">X (Twitter)</span>
-                            <span class="badge">Follow</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Company Directory Drawer Button -->
+            <!-- Right Menu Drawer Button (removed Join Community button) -->
+            <div class="flex items-center space-x-4">
                 <button onclick="toggleMenu()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all cursor-pointer">
                     <i data-lucide="menu" class="w-4 h-4 text-blue-600"></i>
                     <span>Company Directory</span>
@@ -204,109 +124,117 @@
         </div>
     </header>
 
-    <!-- Sliding Right-Side Menu Drawer -->
-    <div id="sideDrawer" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="toggleMenu()"></div>
-        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl border-l border-slate-200 p-8 flex flex-col justify-between overflow-y-auto">
-            
-            <div class="space-y-8">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                    <div class="flex items-center space-x-2">
-                        <i data-lucide="building-2" class="w-5 h-5 text-blue-600"></i>
-                        <span class="font-extrabold text-slate-900 uppercase text-sm">Company Directory</span>
+    <!-- Sliding Right-Side Menu Drawer - Fixed scrolling issue -->
+    <div id="sideDrawer">
+        <div class="drawer-backdrop" onclick="toggleMenu()"></div>
+        <div class="drawer-content">
+            <div class="p-8 flex flex-col justify-between h-full">
+                
+                <div class="space-y-8">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="building-2" class="w-5 h-5 text-blue-600"></i>
+                            <span class="font-extrabold text-slate-900 uppercase text-sm">Company Directory</span>
+                        </div>
+                        <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 cursor-pointer">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
                     </div>
-                    <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 cursor-pointer">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
+
+                    <div class="space-y-3">
+                        <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Corporate Overview</div>
+                        
+                        <button onclick="openEmbed('mission')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="target" class="w-5 h-5 text-blue-600"></i>
+                                <span class="font-bold text-sm text-slate-800">Our Mission</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+
+                        <button onclick="openEmbed('vision')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="eye" class="w-5 h-5 text-purple-600"></i>
+                                <span class="font-bold text-sm text-slate-800">Our Vision</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+
+                        <button onclick="openEmbed('story')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-amber-500 hover:bg-amber-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="book-open" class="w-5 h-5 text-amber-600"></i>
+                                <span class="font-bold text-sm text-slate-800">Our Story</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Trust & Governance</div>
+                        
+                        <button onclick="openEmbed('privacy')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i>
+                                <span class="font-bold text-sm text-slate-800">Privacy Policy</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+
+                        <button onclick="openEmbed('terms')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-slate-500 hover:bg-slate-50 text-left transition-all flex items-center justify-between group cursor-pointer">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="file-text" class="w-5 h-5 text-slate-600"></i>
+                                <span class="font-bold text-sm text-slate-800">Terms of Service</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <!-- Support & Community - with all 5 social links (added YouTube) -->
+                    <div class="space-y-3 pt-4 border-t border-slate-100">
+                        <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Support & Community</div>
+                        
+                        <!-- Email Support -->
+                        <a href="mailto:support.stardustofficial@gmail.com" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                            <i data-lucide="mail" class="w-5 h-5 text-blue-600"></i>
+                            <span class="text-sm font-medium text-slate-700">Email Support</span>
+                        </a>
+
+                        <!-- GitHub -->
+                        <a href="https://github.com/stardustofficial" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                            <i data-lucide="github" class="w-5 h-5 text-slate-800"></i>
+                            <span class="text-sm font-medium text-slate-700">GitHub</span>
+                        </a>
+
+                        <!-- Discord -->
+                        <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                            <i data-lucide="discord" class="w-5 h-5 text-indigo-500"></i>
+                            <span class="text-sm font-medium text-slate-700">Discord</span>
+                        </a>
+
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-blue-700"></i>
+                            <span class="text-sm font-medium text-slate-700">LinkedIn</span>
+                        </a>
+
+                        <!-- X (Twitter) -->
+                        <a href="https://x.com/zishanstardust" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                            <i data-lucide="twitter" class="w-5 h-5 text-black"></i>
+                            <span class="text-sm font-medium text-slate-700">X (Twitter)</span>
+                        </a>
+
+                        <!-- YouTube - NEW -->
+                        <a href="https://youtube.com/@supportstardustofficial?si=j5cv0rqKSYs_2Aoe" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
+                            <i data-lucide="youtube" class="w-5 h-5 text-red-600"></i>
+                            <span class="text-sm font-medium text-slate-700">YouTube</span>
+                        </a>
+                    </div>
                 </div>
 
-                <div class="space-y-3">
-                    <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Corporate Overview</div>
-                    
-                    <button onclick="openEmbed('mission')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center space-x-3">
-                            <i data-lucide="target" class="w-5 h-5 text-blue-600"></i>
-                            <span class="font-bold text-sm text-slate-800">Our Mission</span>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-
-                    <button onclick="openEmbed('vision')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center space-x-3">
-                            <i data-lucide="eye" class="w-5 h-5 text-purple-600"></i>
-                            <span class="font-bold text-sm text-slate-800">Our Vision</span>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-
-                    <button onclick="openEmbed('story')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-amber-500 hover:bg-amber-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center space-x-3">
-                            <i data-lucide="book-open" class="w-5 h-5 text-amber-600"></i>
-                            <span class="font-bold text-sm text-slate-800">Our Story</span>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
+                <div class="pt-8 border-t border-slate-100 text-xs text-slate-500">
+                    <span class="font-bold text-slate-700">Contact:</span><br>
+                    <a href="mailto:support.stardustofficial@gmail.com" class="font-bold text-blue-600 hover:underline">support.stardustofficial@gmail.com</a>
                 </div>
-
-                <div class="space-y-3">
-                    <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Trust & Governance</div>
-                    
-                    <button onclick="openEmbed('privacy')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 text-left transition-all flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center space-x-3">
-                            <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i>
-                            <span class="font-bold text-sm text-slate-800">Privacy Policy</span>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-
-                    <button onclick="openEmbed('terms')" class="w-full p-4 rounded-xl border border-slate-200 hover:border-slate-500 hover:bg-slate-50 text-left transition-all flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center space-x-3">
-                            <i data-lucide="file-text" class="w-5 h-5 text-slate-600"></i>
-                            <span class="font-bold text-sm text-slate-800">Terms of Service</span>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                </div>
-
-                <!-- Support & Community - UPDATED with all 4 social links -->
-                <div class="space-y-3 pt-4 border-t border-slate-100">
-                    <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Support & Community</div>
-                    
-                    <!-- Email Support -->
-                    <a href="mailto:support.stardustofficial@gmail.com" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
-                        <i data-lucide="mail" class="w-5 h-5 text-blue-600"></i>
-                        <span class="text-sm font-medium text-slate-700">Email Support</span>
-                    </a>
-
-                    <!-- GitHub -->
-                    <a href="https://github.com/stardustofficial" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
-                        <i data-lucide="github" class="w-5 h-5 text-slate-800"></i>
-                        <span class="text-sm font-medium text-slate-700">GitHub</span>
-                    </a>
-
-                    <!-- Discord -->
-                    <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
-                        <i data-lucide="discord" class="w-5 h-5 text-indigo-500"></i>
-                        <span class="text-sm font-medium text-slate-700">Discord</span>
-                    </a>
-
-                    <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
-                        <i data-lucide="linkedin" class="w-5 h-5 text-blue-700"></i>
-                        <span class="text-sm font-medium text-slate-700">LinkedIn</span>
-                    </a>
-
-                    <!-- X (Twitter) -->
-                    <a href="https://x.com/zishanstardust" target="_blank" class="flex items-center space-x-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-all">
-                        <i data-lucide="twitter" class="w-5 h-5 text-black"></i>
-                        <span class="text-sm font-medium text-slate-700">X (Twitter)</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="pt-8 border-t border-slate-100 text-xs text-slate-500">
-                <span class="font-bold text-slate-700">Contact:</span><br>
-                <a href="mailto:support.stardustofficial@gmail.com" class="font-bold text-blue-600 hover:underline">support.stardustofficial@gmail.com</a>
             </div>
         </div>
     </div>
@@ -531,7 +459,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- existing 6 cards are already shown above, but we add the new ones here in a clean grid -->
                 <!-- Utility -->
                 <div class="corp-card p-6 rounded-2xl flex items-center space-x-4 hover:border-blue-400 transition-all">
                     <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center"><i data-lucide="wand-2" class="w-5 h-5"></i></div>
@@ -618,7 +545,7 @@
                     A world-class digital ecosystem designed and built single-handedly by Zishan.
                 </p>
                 <div>Official Support Email: <a href="mailto:support.stardustofficial@gmail.com" class="text-blue-400 font-bold hover:underline">support.stardustofficial@gmail.com</a></div>
-                <!-- Footer Social Links - UPDATED with all 4 -->
+                <!-- Footer Social Links - with YouTube -->
                 <div class="flex items-center space-x-4 pt-2 flex-wrap gap-y-2">
                     <a href="https://github.com/stardustofficial" target="_blank" class="flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
                         <i data-lucide="github" class="w-4 h-4"></i>
@@ -635,6 +562,10 @@
                     <a href="https://x.com/zishanstardust" target="_blank" class="flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
                         <i data-lucide="twitter" class="w-4 h-4"></i>
                         <span>X</span>
+                    </a>
+                    <a href="https://youtube.com/@supportstardustofficial?si=j5cv0rqKSYs_2Aoe" target="_blank" class="flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="youtube" class="w-4 h-4 text-red-500"></i>
+                        <span>YouTube</span>
                     </a>
                 </div>
             </div>
@@ -660,6 +591,7 @@
                     <a href="https://discord.gg/Xhh5r2UM5C" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="discord" class="w-3.5 h-3.5"></i><span>Discord</span></a>
                     <a href="https://www.linkedin.com/in/stardust-inc-a8a71241a?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="linkedin" class="w-3.5 h-3.5"></i><span>LinkedIn</span></a>
                     <a href="https://x.com/zishanstardust" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="twitter" class="w-3.5 h-3.5"></i><span>X</span></a>
+                    <a href="https://youtube.com/@supportstardustofficial?si=j5cv0rqKSYs_2Aoe" target="_blank" class="flex items-center space-x-2 hover:text-white"><i data-lucide="youtube" class="w-3.5 h-3.5 text-red-500"></i><span>YouTube</span></a>
                 </div>
             </div>
 
@@ -733,22 +665,10 @@
 
         function toggleMenu() {
             const drawer = document.getElementById('sideDrawer');
-            drawer.classList.toggle('hidden');
+            drawer.style.display = drawer.style.display === 'block' ? 'none' : 'block';
+            // Prevent body scroll when drawer is open
+            document.body.style.overflow = drawer.style.display === 'block' ? 'hidden' : '';
         }
-
-        function toggleSocialDropdown() {
-            const dropdown = document.getElementById('socialDropdown');
-            dropdown.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('socialDropdown');
-            const button = event.target.closest('.social-dropdown');
-            if (!button) {
-                dropdown.classList.remove('show');
-            }
-        });
 
         function openEmbed(key) {
             const modal = document.getElementById('embedModal');
