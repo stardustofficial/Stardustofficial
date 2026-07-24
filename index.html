@@ -183,16 +183,6 @@
                 padding-right: 1.5rem;
             }
         }
-        .nav-btn-sm {
-            font-size: 0.6rem;
-            padding: 0.4rem 0.6rem;
-        }
-        @media (min-width: 400px) {
-            .nav-btn-sm {
-                font-size: 0.65rem;
-                padding: 0.5rem 0.8rem;
-            }
-        }
 
         /* Toast notification */
         .toast {
@@ -220,6 +210,26 @@
         @keyframes slideDown {
             from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Latest Updates section */
+        .latest-card {
+            transition: all 0.3s ease;
+        }
+        .latest-card:hover {
+            transform: translateY(-4px);
+            border-color: #10b981;
+            box-shadow: 0 12px 30px -8px rgba(16, 185, 129, 0.15);
+        }
+        .latest-card .date-badge {
+            font-size: 0.6rem;
+            letter-spacing: 0.02em;
+        }
+        .view-all-link {
+            transition: all 0.2s ease;
+        }
+        .view-all-link:hover {
+            gap: 0.75rem;
         }
     </style>
 </head>
@@ -714,6 +724,36 @@
         </div>
     </section>
 
+    <!-- ===== LATEST UPDATES - MAIN SCREEN (3 POSTS) ===== -->
+    <!-- Yeh section Timeline ke neeche aur Footer ke uper hai -->
+    <section id="latest-updates" class="py-12 sm:py-16 px-4 sm:px-6 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between mb-6 sm:mb-8">
+                <div>
+                    <span class="text-[10px] sm:text-xs font-bold text-emerald-600 uppercase tracking-widest font-mono flex items-center gap-2">
+                        <i data-lucide="zap" class="w-3 h-3 sm:w-4 sm:h-4"></i> Latest News
+                    </span>
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 mt-0.5 sm:mt-1">Recent Updates</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Stay updated with the latest from Stardust</p>
+                </div>
+                <button onclick="openUpdatesDrawer()" class="text-xs sm:text-sm text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1 sm:gap-2 transition-all group">
+                    View all updates 
+                    <i data-lucide="arrow-right" class="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+
+            <div id="latestUpdatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Loading State -->
+                <div class="col-span-full text-center py-8 sm:py-12" id="latestLoader">
+                    <div class="inline-flex items-center gap-3 text-slate-400">
+                        <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
+                        <span class="text-sm">Loading updates...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Support Contact Footer -->
     <footer class="bg-slate-900 text-slate-400 py-10 sm:py-16 px-4 sm:px-6 text-[10px] sm:text-xs">
         <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 mb-8 sm:mb-12">
@@ -920,13 +960,183 @@
         let currentFilter = 'all';
         let searchTerm = '';
         let isListening = false;
+        let isLatestListenerActive = false;
+        let latestUpdates = [];
 
         const grid = document.getElementById('updatesGridDrawer');
         const loader = document.getElementById('updatesLoaderDrawer');
         const searchInput = document.getElementById('updateSearchDrawer');
         const categoryBtns = document.querySelectorAll('#categoryFilterDrawer button');
 
-        // ===== REAL-TIME LISTENER =====
+        // ===== LATEST 3 UPDATES - MAIN SCREEN =====
+        async function fetchLatestUpdates() {
+            try {
+                const snapshot = await db.collection('updates')
+                    .orderBy('timestamp', 'desc')
+                    .limit(3)
+                    .get();
+                
+                const grid = document.getElementById('latestUpdatesGrid');
+                const loader = document.getElementById('latestLoader');
+                
+                if (snapshot.empty) {
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-8 text-slate-400 text-sm">
+                            <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                            <p>No updates yet. Check back soon!</p>
+                        </div>
+                    `;
+                    lucide.createIcons();
+                    return;
+                }
+                
+                latestUpdates = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    latestUpdates.push({
+                        id: doc.id,
+                        ...data,
+                        timestamp: data.timestamp?.toDate?.() || new Date()
+                    });
+                });
+                
+                renderLatestUpdates();
+                
+            } catch (e) {
+                console.error('Error fetching latest updates:', e);
+                document.getElementById('latestUpdatesGrid').innerHTML = `
+                    <div class="col-span-full text-center py-8 text-red-400 text-sm">
+                        ⚠️ Could not load updates. Please refresh.
+                    </div>
+                `;
+            }
+        }
+
+        function renderLatestUpdates() {
+            const grid = document.getElementById('latestUpdatesGrid');
+            
+            if (latestUpdates.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-slate-400 text-sm">
+                        <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                        <p>No updates yet. Check back soon!</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            grid.innerHTML = latestUpdates.map(up => `
+                <div class="corp-card latest-card p-4 sm:p-6 rounded-2xl flex flex-col cursor-pointer hover:shadow-lg transition-all" onclick="openUpdateDetailDrawer('${up.id}')">
+                    ${up.featured ? `<div class="featured-badge self-start px-2 py-0.5 rounded mb-1.5 sm:mb-2">★ FEATURED</div>` : ''}
+                    <div class="flex items-center justify-between mb-1.5 sm:mb-2">
+                        <span class="badge-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold bg-${getStatusColor(up.status)}-100 text-${getStatusColor(up.status)}-700 border border-${getStatusColor(up.status)}-200 uppercase text-[8px] sm:text-[10px]">${up.status || 'Planning'}</span>
+                        <span class="text-[8px] sm:text-[10px] font-mono text-slate-400">${up.category || 'General'}</span>
+                    </div>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-tight line-clamp-2">${up.title}</h3>
+                    <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">${up.content?.substring(0, 100) || ''}${up.content?.length > 100 ? '...' : ''}</p>
+                    ${up.imageUrl ? `
+                        <div class="mt-2 sm:mt-3 rounded-lg overflow-hidden">
+                            <img src="${up.imageUrl}" alt="${up.title}" class="w-full h-24 sm:h-32 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" />
+                        </div>
+                    ` : ''}
+                    <div class="mt-2 sm:mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i>
+                            ${up.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) || ''}
+                        </span>
+                        ${up.tags ? `<div class="flex gap-1">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[9px]">#${t}</span>`).join('')}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+            
+            // Update AI structured data with latest 3
+            updateLatestAIStructuredData(latestUpdates);
+        }
+
+        // ===== AI STRUCTURED DATA FOR LATEST 3 =====
+        function updateLatestAIStructuredData(updates) {
+            // Remove old script
+            const oldScript = document.querySelector('script[data-stardust-latest-ld]');
+            if (oldScript) oldScript.remove();
+            
+            const script = document.createElement('script');
+            script.setAttribute('data-stardust-latest-ld', 'true');
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Stardust Latest 3 Updates",
+                "description": "Latest 3 updates from Stardust Corporation - AI accessible",
+                "dateModified": new Date().toISOString(),
+                "numberOfItems": updates.length,
+                "itemListElement": updates.map((up, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "item": {
+                        "@type": "Article",
+                        "headline": up.title,
+                        "description": up.content?.substring(0, 300) || '',
+                        "datePublished": up.timestamp?.toISOString() || new Date().toISOString(),
+                        "category": up.category || 'General',
+                        "status": up.status || 'Planning',
+                        "image": up.imageUrl || '',
+                        "tags": up.tags || []
+                    }
+                }))
+            });
+            document.head.appendChild(script);
+        }
+
+        // ===== REAL-TIME LISTENER FOR LATEST UPDATES =====
+        function startLatestUpdatesListener() {
+            if (isLatestListenerActive) return;
+            isLatestListenerActive = true;
+            
+            db.collection('updates')
+                .orderBy('timestamp', 'desc')
+                .limit(3)
+                .onSnapshot((snapshot) => {
+                    if (snapshot.empty) {
+                        latestUpdates = [];
+                        renderLatestUpdates();
+                        return;
+                    }
+                    
+                    latestUpdates = [];
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        latestUpdates.push({
+                            id: doc.id,
+                            ...data,
+                            timestamp: data.timestamp?.toDate?.() || new Date()
+                        });
+                    });
+                    
+                    renderLatestUpdates();
+                    
+                }, (error) => {
+                    console.error('Latest updates listener error:', error);
+                });
+        }
+
+        // ===== EXPOSE LATEST UPDATES FOR AI =====
+        window.getStardustLatestUpdates = function() {
+            return latestUpdates.map(u => ({
+                title: u.title,
+                content: u.content,
+                category: u.category,
+                status: u.status,
+                featured: u.featured,
+                tags: u.tags || [],
+                date: u.timestamp?.toISOString() || new Date().toISOString(),
+                imageUrl: u.imageUrl || null
+            }));
+        };
+
+        // ===== REAL-TIME LISTENER FOR ALL UPDATES =====
         function startRealtimeListener() {
             if (isListening) return;
             isListening = true;
@@ -1178,15 +1388,19 @@
         // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
-            // Load updates when drawer is first opened
-            // fetchUpdatesDrawer will be called when user clicks Updates button
+            
+            // Fetch latest 3 updates for main screen
+            fetchLatestUpdates();
+            
+            // Start real-time listener for latest updates
+            startLatestUpdatesListener();
+            
             console.log('🌟 STARDUST UPDATES API:');
-            console.log('📡 Call window.getStardustUpdates() to get all updates');
+            console.log('📡 Call window.getStardustUpdates() to get ALL updates');
+            console.log('📡 Call window.getStardustLatestUpdates() to get LATEST 3 updates');
             console.log('🔄 Real-time updates enabled - new posts appear instantly!');
+            console.log('🤖 AI accessible: Structured data available for crawlers');
         });
-
-        // Also expose for AI
-        console.log('🤖 AI accessible: Structured data available for crawlers');
     </script>
 </body>
 </html>
