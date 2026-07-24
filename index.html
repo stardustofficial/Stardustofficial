@@ -45,7 +45,7 @@
             background-color: rgba(15, 23, 42, 0.4);
         }
 
-        /* Side Drawer - Fixed positioning so only drawer scrolls */
+        /* Side Drawer */
         #sideDrawer {
             position: fixed;
             inset: 0;
@@ -108,6 +108,7 @@
             color: #1e293b;
             border: 1px solid #e2e8f0;
             cursor: pointer;
+            transition: all 0.2s;
         }
         .category-pill.active {
             background: #2563eb;
@@ -133,6 +134,39 @@
             font-weight: 800;
             letter-spacing: 0.05em;
         }
+
+        /* Fullscreen image viewer */
+        #imageViewer {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.92);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        #imageViewer img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+        #imageViewer .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        #imageViewer .close-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
     </style>
 </head>
 <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
@@ -152,25 +186,73 @@
                 </div>
             </a>
 
-            <!-- Navigation Links -->
+            <!-- Navigation Links - UPDATES REMOVED FROM HERE -->
             <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-wider uppercase text-slate-600">
                 <a href="#ecosystem" class="hover:text-blue-600 transition-colors">Products</a>
                 <a href="#developers" class="hover:text-blue-600 transition-colors">Developers</a>
                 <a href="#research" class="hover:text-blue-600 transition-colors">Research</a>
                 <a href="#timeline" class="hover:text-blue-600 transition-colors">Roadmap</a>
                 <a href="#full-ecosystem" class="hover:text-blue-600 transition-colors bg-blue-50 px-4 py-2 rounded-full text-blue-700 border border-blue-200">Ecosystem</a>
-                <a href="#updates" class="hover:text-blue-600 transition-colors bg-emerald-50 px-4 py-2 rounded-full text-emerald-700 border border-emerald-200">Updates</a>
             </nav>
 
-            <!-- Right Menu Drawer Button -->
+            <!-- Right Menu Drawer Button - UPDATES BUTTON ADDED HERE -->
             <div class="flex items-center space-x-4">
+                <button onclick="openUpdatesDrawer()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all cursor-pointer shadow-lg shadow-emerald-600/20">
+                    <i data-lucide="megaphone" class="w-4 h-4"></i>
+                    <span>Updates</span>
+                </button>
                 <button onclick="toggleMenu()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all cursor-pointer">
                     <i data-lucide="menu" class="w-4 h-4 text-blue-600"></i>
-                    <span>Company Directory</span>
+                    <span>Company</span>
                 </button>
             </div>
         </div>
     </header>
+
+    <!-- UPDATES DRAWER - Premium Updates Panel -->
+    <div id="updatesDrawer" class="fixed inset-0 z-50 hidden overflow-hidden">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeUpdatesDrawer()"></div>
+        <div class="absolute right-0 top-0 h-full w-full max-w-4xl bg-white shadow-2xl overflow-y-auto">
+            <div class="sticky top-0 bg-white/95 backdrop-blur border-b border-slate-200 px-6 py-4 flex items-center justify-between z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white">
+                        <i data-lucide="megaphone" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-slate-900">Updates & Releases</h2>
+                        <p class="text-xs text-slate-400">Official announcements from Stardust</p>
+                    </div>
+                </div>
+                <button onclick="closeUpdatesDrawer()" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 cursor-pointer">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Search & Filters inside drawer -->
+            <div class="px-6 py-4 border-b border-slate-100">
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="relative flex-1 min-w-[200px]">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                        <input id="updateSearchDrawer" type="text" placeholder="Search updates..." class="search-input pl-9 pr-4 py-2.5 rounded-xl text-sm w-full bg-white shadow-sm">
+                    </div>
+                    <div id="categoryFilterDrawer" class="flex flex-wrap gap-1.5">
+                        <button data-cat="all" class="category-pill active px-3 py-1.5 rounded-full text-xs font-bold transition-all">All</button>
+                        <button data-cat="Release" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Release</button>
+                        <button data-cat="Development" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Dev</button>
+                        <button data-cat="Feature" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Feature</button>
+                        <button data-cat="Announcement" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Announce</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Updates Grid -->
+            <div class="p-6">
+                <div id="updatesGridDrawer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="col-span-full text-center py-12 text-slate-400 text-sm" id="updatesLoaderDrawer">Loading updates...</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Sliding Right-Side Menu Drawer -->
     <div id="sideDrawer">
@@ -237,7 +319,6 @@
                         </button>
                     </div>
 
-                    <!-- Support & Community -->
                     <div class="space-y-3 pt-4 border-t border-slate-100">
                         <div class="text-[11px] font-bold uppercase text-slate-400 tracking-wider font-mono">Support & Community</div>
                         
@@ -303,6 +384,12 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- Fullscreen Image Viewer -->
+    <div id="imageViewer" onclick="closeImageViewer()">
+        <span class="close-btn">&times;</span>
+        <img id="fullscreenImage" src="" alt="Fullscreen view">
     </div>
 
     <!-- Hero Section -->
@@ -535,70 +622,6 @@
         </div>
     </section>
 
-    <!-- ==================== UPDATES SECTION (NEW) ==================== -->
-    <section id="updates" class="py-28 px-6 bg-white border-t border-slate-200">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                <div>
-                    <span class="text-xs font-bold text-blue-600 uppercase tracking-widest font-mono">Latest News</span>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-2">Project Updates & Releases</h2>
-                    <p class="text-slate-500 max-w-xl mt-1 text-sm">Official announcements, development logs, release notes, and upcoming features.</p>
-                </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="relative">
-                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-                        <input id="updateSearch" type="text" placeholder="Search updates..." class="search-input pl-9 pr-4 py-2.5 rounded-xl text-sm w-48 md:w-56 bg-white shadow-sm">
-                    </div>
-                    <div id="categoryFilter" class="flex flex-wrap gap-1.5">
-                        <button data-cat="all" class="category-pill active px-3 py-1.5 rounded-full text-xs font-bold transition-all">All</button>
-                        <button data-cat="Release" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Release</button>
-                        <button data-cat="Development" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Dev</button>
-                        <button data-cat="Feature" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Feature</button>
-                        <button data-cat="Announcement" class="category-pill px-3 py-1.5 rounded-full text-xs font-bold transition-all">Announce</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="updatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="col-span-full text-center py-12 text-slate-400 text-sm" id="updatesLoader">Loading updates...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== UPDATE DETAIL MODAL ===== -->
-    <div id="updateDetailModal" class="fixed inset-0 z-50 hidden modal-blur flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all flex flex-col">
-            <div class="flex items-start justify-between p-6 border-b border-slate-100">
-                <div>
-                    <span id="detailStatus" class="inline-block text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700"></span>
-                    <h3 id="detailTitle" class="text-2xl font-black text-slate-900 mt-2">Title</h3>
-                    <div class="flex items-center gap-3 mt-1 text-xs text-slate-400">
-                        <span id="detailCategory"></span>
-                        <span>•</span>
-                        <span id="detailDate"></span>
-                        <span id="detailFeatured" class="hidden featured-badge px-2 py-0.5 rounded">★ Featured</span>
-                    </div>
-                </div>
-                <button onclick="closeUpdateDetail()" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <div class="p-6 overflow-y-auto flex-1 space-y-4 text-slate-600 text-sm leading-relaxed">
-                <div id="detailImage" class="rounded-xl overflow-hidden bg-slate-100"></div>
-                <div id="detailContent" class="prose prose-sm max-w-none"></div>
-                <div id="detailChangelog" class="border-t border-slate-100 pt-4 mt-4">
-                    <h4 class="font-bold text-slate-800 text-sm">Changelog</h4>
-                    <ul id="detailChangelogList" class="list-disc list-inside space-y-1 text-xs text-slate-500"></ul>
-                </div>
-                <div id="detailRelated" class="border-t border-slate-100 pt-4 mt-2">
-                    <h4 class="font-bold text-slate-800 text-sm">Related updates</h4>
-                    <div id="detailRelatedList" class="flex flex-wrap gap-2 mt-2"></div>
-                </div>
-            </div>
-            <div class="border-t border-slate-100 p-4 flex justify-end">
-                <button onclick="closeUpdateDetail()" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs uppercase tracking-wider hover:bg-blue-600 transition-colors cursor-pointer">Close</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Company Roadmap Timeline Section -->
     <section id="timeline" class="py-28 px-6 bg-slate-50 border-t border-slate-200">
         <div class="max-w-4xl mx-auto space-y-16">
@@ -792,6 +815,31 @@
             document.getElementById('embedModal').classList.add('hidden');
         }
 
+        // ===== UPDATES DRAWER FUNCTIONS =====
+        function openUpdatesDrawer() {
+            document.getElementById('updatesDrawer').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            fetchUpdatesDrawer();
+        }
+
+        function closeUpdatesDrawer() {
+            document.getElementById('updatesDrawer').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // ===== FULLSCREEN IMAGE VIEWER =====
+        function openImageViewer(imageUrl) {
+            const viewer = document.getElementById('imageViewer');
+            document.getElementById('fullscreenImage').src = imageUrl;
+            viewer.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageViewer() {
+            document.getElementById('imageViewer').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
         // ===== FIREBASE UPDATES LOGIC =====
         const firebaseConfig = {
             apiKey: "AIzaSyAL0FSX7YfhQ-IoqE3a7axcLjgN7cPySM0",
@@ -809,12 +857,12 @@
         let currentFilter = 'all';
         let searchTerm = '';
 
-        const grid = document.getElementById('updatesGrid');
-        const loader = document.getElementById('updatesLoader');
-        const searchInput = document.getElementById('updateSearch');
-        const categoryBtns = document.querySelectorAll('#categoryFilter button');
+        const grid = document.getElementById('updatesGridDrawer');
+        const loader = document.getElementById('updatesLoaderDrawer');
+        const searchInput = document.getElementById('updateSearchDrawer');
+        const categoryBtns = document.querySelectorAll('#categoryFilterDrawer button');
 
-        async function fetchUpdates() {
+        async function fetchUpdatesDrawer() {
             try {
                 const snapshot = await db.collection('updates')
                     .orderBy('timestamp', 'desc')
@@ -832,7 +880,7 @@
                         timestamp: data.timestamp?.toDate?.() || new Date()
                     });
                 });
-                renderUpdates();
+                renderUpdatesDrawer();
             } catch (e) {
                 console.error('Firestore error:', e);
                 grid.innerHTML = `<div class="col-span-full text-center py-12 text-red-400 text-sm">⚠️ Could not load updates. Please try again later.</div>`;
@@ -844,7 +892,7 @@
             return map[status] || 'slate';
         }
 
-        function renderUpdates() {
+        function renderUpdatesDrawer() {
             const filtered = allUpdates.filter(up => {
                 const matchCategory = currentFilter === 'all' || up.category === currentFilter;
                 const matchSearch = up.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -859,7 +907,7 @@
             }
 
             grid.innerHTML = filtered.map(up => `
-                <div class="corp-card update-card p-6 rounded-2xl flex flex-col cursor-pointer" onclick="openUpdateDetail('${up.id}')">
+                <div class="corp-card update-card p-6 rounded-2xl flex flex-col cursor-pointer" onclick="openUpdateDetailDrawer('${up.id}')">
                     ${up.featured ? `<div class="featured-badge self-start px-2.5 py-0.5 rounded mb-2">★ FEATURED</div>` : ''}
                     <div class="flex items-center justify-between mb-2">
                         <span class="badge-status px-2.5 py-1 rounded-full font-bold bg-${getStatusColor(up.status)}-100 text-${getStatusColor(up.status)}-700 border border-${getStatusColor(up.status)}-200 uppercase">${up.status || 'Planning'}</span>
@@ -867,6 +915,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-slate-900 leading-tight">${up.title}</h3>
                     <p class="text-xs text-slate-500 mt-1 line-clamp-2">${up.content?.substring(0, 120) || ''}${up.content?.length > 120 ? '...' : ''}</p>
+                    ${up.imageUrl ? `<div class="mt-3 rounded-lg overflow-hidden"><img src="${up.imageUrl}" alt="${up.title}" class="w-full h-40 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" /></div>` : ''}
                     <div class="mt-4 flex items-center justify-between text-[10px] text-slate-400">
                         <span>${up.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) || ''}</span>
                         ${up.tags ? `<div class="flex gap-1.5">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-2 py-0.5 rounded-full text-[9px]">#${t}</span>`).join('')}</div>` : ''}
@@ -877,69 +926,157 @@
             lucide.createIcons();
         }
 
-        async function openUpdateDetail(id) {
+        async function openUpdateDetailDrawer(id) {
             const up = allUpdates.find(u => u.id === id);
             if (!up) return;
-            const modal = document.getElementById('updateDetailModal');
-            document.getElementById('detailTitle').textContent = up.title;
-            document.getElementById('detailStatus').textContent = up.status || 'Planning';
-            document.getElementById('detailStatus').className = `inline-block text-xs font-bold px-3 py-1 rounded-full bg-${getStatusColor(up.status)}-100 text-${getStatusColor(up.status)}-700`;
-            document.getElementById('detailCategory').textContent = up.category || 'General';
-            document.getElementById('detailDate').textContent = up.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) || '';
-            const featuredEl = document.getElementById('detailFeatured');
-            if (up.featured) { featuredEl.classList.remove('hidden'); } else { featuredEl.classList.add('hidden'); }
-            document.getElementById('detailContent').innerHTML = up.content || 'No content.';
             
-            const imgContainer = document.getElementById('detailImage');
-            if (up.imageUrl) {
-                imgContainer.innerHTML = `<img src="${up.imageUrl}" alt="${up.title}" class="w-full h-auto max-h-64 object-cover rounded-xl" />`;
-            } else {
-                imgContainer.innerHTML = '';
-            }
+            // Create a modal inside the drawer
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-60 bg-black/50 backdrop-blur flex items-center justify-center p-4';
+            modal.id = 'updateDetailModalDrawer';
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
             
-            const changelogContainer = document.getElementById('detailChangelog');
-            const changelogList = document.getElementById('detailChangelogList');
-            if (up.changelog && up.changelog.length) {
-                changelogContainer.style.display = 'block';
-                changelogList.innerHTML = up.changelog.map(c => `<li>${c}</li>`).join('');
-            } else {
-                changelogContainer.style.display = 'none';
-            }
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 border border-slate-200 shadow-2xl">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <span class="inline-block text-xs font-bold px-3 py-1 rounded-full bg-${getStatusColor(up.status)}-100 text-${getStatusColor(up.status)}-700">${up.status || 'Planning'}</span>
+                            <h3 class="text-2xl font-black text-slate-900 mt-2">${up.title}</h3>
+                            <div class="flex items-center gap-3 mt-1 text-xs text-slate-400">
+                                <span>${up.category || 'General'}</span>
+                                <span>•</span>
+                                <span>${up.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) || ''}</span>
+                                ${up.featured ? `<span class="featured-badge px-2 py-0.5 rounded">★ Featured</span>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="this.closest('#updateDetailModalDrawer').remove()" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    ${up.imageUrl ? `<div class="rounded-xl overflow-hidden bg-slate-100 mb-4 cursor-pointer" onclick="openImageViewer('${up.imageUrl}')"><img src="${up.imageUrl}" alt="${up.title}" class="w-full max-h-80 object-cover" /></div>` : ''}
+                    
+                    <div class="text-sm text-slate-600 leading-relaxed">${up.content || 'No content.'}</div>
+                    
+                    ${up.changelog && up.changelog.length ? `
+                        <div class="border-t border-slate-100 pt-4 mt-4">
+                            <h4 class="font-bold text-slate-800 text-sm">Changelog</h4>
+                            <ul class="list-disc list-inside space-y-1 text-xs text-slate-500">${up.changelog.map(c => `<li>${c}</li>`).join('')}</ul>
+                        </div>
+                    ` : ''}
+                    
+                    ${up.tags && up.tags.length ? `
+                        <div class="border-t border-slate-100 pt-4 mt-4">
+                            <h4 class="font-bold text-slate-800 text-sm">Tags</h4>
+                            <div class="flex flex-wrap gap-2 mt-2">${up.tags.map(t => `<span class="bg-slate-100 px-3 py-1 rounded-full text-xs text-slate-700">#${t}</span>`).join('')}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="border-t border-slate-100 pt-4 mt-4 flex justify-end">
+                        <button onclick="this.closest('#updateDetailModalDrawer').remove()" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs uppercase tracking-wider hover:bg-blue-600 transition-colors">Close</button>
+                    </div>
+                </div>
+            `;
             
-            const relatedContainer = document.getElementById('detailRelated');
-            const relatedList = document.getElementById('detailRelatedList');
-            if (up.related && up.related.length) {
-                relatedContainer.style.display = 'block';
-                relatedList.innerHTML = up.related.map(r => `<span class="bg-slate-100 px-3 py-1 rounded-full text-xs text-slate-700">${r}</span>`).join('');
-            } else {
-                relatedContainer.style.display = 'none';
-            }
-            modal.classList.remove('hidden');
+            document.body.appendChild(modal);
             lucide.createIcons();
         }
 
-        function closeUpdateDetail() {
-            document.getElementById('updateDetailModal').classList.add('hidden');
-        }
-
+        // Category filter for drawer
         categoryBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 categoryBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentFilter = this.dataset.cat;
-                renderUpdates();
+                renderUpdatesDrawer();
             });
         });
 
+        // Search for drawer
         searchInput.addEventListener('input', function() {
             searchTerm = this.value;
-            renderUpdates();
+            renderUpdatesDrawer();
         });
 
+        // ===== AI ACCESSIBILITY - Expose updates data for AI =====
+        // Make updates data available globally for AI agents
+        window.getStardustUpdates = function() {
+            return allUpdates.map(u => ({
+                title: u.title,
+                content: u.content,
+                category: u.category,
+                status: u.status,
+                featured: u.featured,
+                tags: u.tags || [],
+                date: u.timestamp?.toISOString() || new Date().toISOString(),
+                imageUrl: u.imageUrl || null
+            }));
+        };
+
+        // Generate structured data for AI crawlers
+        function generateStructuredData() {
+            const updatesData = allUpdates.slice(0, 10).map(u => ({
+                "@type": "Article",
+                "headline": u.title,
+                "description": u.content?.substring(0, 200) || '',
+                "datePublished": u.timestamp?.toISOString() || new Date().toISOString(),
+                "category": u.category || 'General',
+                "status": u.status || 'Planning',
+                "image": u.imageUrl || '',
+                "tags": u.tags || []
+            }));
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "CollectionPage",
+                "name": "Stardust Updates & Releases",
+                "description": "Official announcements, development logs, and release notes from Stardust Corporation",
+                "mainEntity": {
+                    "@type": "ItemList",
+                    "itemListElement": updatesData.map((u, i) => ({
+                        "@type": "ListItem",
+                        "position": i + 1,
+                        "item": u
+                    }))
+                }
+            });
+            document.head.appendChild(script);
+        }
+
+        // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
-            fetchUpdates();
+            // Initial fetch for drawer (will be called when drawer opens)
             lucide.createIcons();
+            
+            // Generate structured data for AI
+            setTimeout(() => {
+                if (allUpdates.length > 0) {
+                    generateStructuredData();
+                }
+            }, 2000);
         });
+
+        // Also expose for AI when updates load
+        const origFetch = fetchUpdatesDrawer;
+        fetchUpdatesDrawer = async function() {
+            await origFetch();
+            // After updates load, generate structured data
+            generateStructuredData();
+            
+            // Also make updates available via meta tags for AI
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc && allUpdates.length > 0) {
+                const latest = allUpdates[0];
+                metaDesc.content = `Stardust Corporation - Latest: ${latest.title}. ${latest.content?.substring(0, 150) || ''}`;
+            }
+        };
+
+        // Override to ensure AI can access
+        console.log('🌟 STARDUST UPDATES API:');
+        console.log('📡 Call window.getStardustUpdates() to get all updates');
+        console.log('🤖 Structured data available for AI crawlers');
     </script>
 </body>
 </html>
