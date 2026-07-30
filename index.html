@@ -46,7 +46,6 @@
             background-color: rgba(15, 23, 42, 0.4);
         }
 
-        /* Side Drawer */
         #sideDrawer {
             position: fixed;
             inset: 0;
@@ -81,17 +80,14 @@
         .drawer-content::-webkit-scrollbar {
             width: 4px;
         }
-
         .drawer-content::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
-
         .drawer-content::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 10px;
         }
 
-        /* Update section styles */
         .update-card {
             transition: all 0.25s ease;
         }
@@ -139,7 +135,6 @@
             letter-spacing: 0.05em;
         }
 
-        /* Fullscreen image viewer */
         #imageViewer {
             position: fixed;
             inset: 0;
@@ -172,7 +167,6 @@
             background: rgba(255,255,255,0.3);
         }
 
-        /* Responsive header */
         .header-container {
             padding-left: 0.75rem;
             padding-right: 0.75rem;
@@ -184,7 +178,6 @@
             }
         }
 
-        /* Toast notification */
         .toast {
             animation: slideDown 0.3s ease;
             position: fixed;
@@ -212,7 +205,6 @@
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
-        /* Latest Updates section */
         .latest-card {
             transition: all 0.3s ease;
         }
@@ -221,18 +213,8 @@
             border-color: #10b981;
             box-shadow: 0 12px 30px -8px rgba(16, 185, 129, 0.15);
         }
-        .latest-card .date-badge {
-            font-size: 0.6rem;
-            letter-spacing: 0.02em;
-        }
-        .view-all-link {
-            transition: all 0.2s ease;
-        }
-        .view-all-link:hover {
-            gap: 0.75rem;
-        }
 
-        /* Website cards */
+        /* Website Cards - Same style as ecosystem cards */
         .website-card {
             transition: all 0.3s ease;
         }
@@ -245,15 +227,20 @@
             font-size: 0.55rem;
             letter-spacing: 0.05em;
         }
+
+        /* No loading state - always visible */
+        #websitesGrid .placeholder-card {
+            opacity: 1;
+            transition: none;
+        }
     </style>
 </head>
 <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- Main Navigation Bar - Responsive -->
+    <!-- Main Navigation Bar -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
         <div class="max-w-7xl mx-auto header-container h-16 sm:h-20 flex justify-between items-center gap-1 sm:gap-2">
             
-            <!-- Brand Logo - Smaller on mobile -->
             <a href="#hero" class="flex items-center space-x-2 sm:space-x-3 group shrink-0">
                 <div class="w-7 h-7 sm:w-10 sm:h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:bg-blue-700 transition-colors">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5 sm:w-5 sm:h-5"></i>
@@ -264,25 +251,21 @@
                 </div>
             </a>
 
-            <!-- Navigation Links - Hidden on mobile, shown on md+ -->
             <nav class="hidden md:flex items-center space-x-6 text-xs font-bold tracking-wider uppercase text-slate-600">
                 <a href="#ecosystem" class="hover:text-blue-600 transition-colors">Products</a>
                 <a href="#developers" class="hover:text-blue-600 transition-colors">Developers</a>
                 <a href="#research" class="hover:text-blue-600 transition-colors">Research</a>
                 <a href="#timeline" class="hover:text-blue-600 transition-colors">Roadmap</a>
-                <a href="#full-ecosystem" class="hover:text-blue-600 transition-colors bg-blue-50 px-3 py-1.5 rounded-full text-blue-700 border border-blue-200">Ecosystem</a>
+                <a href="#websites-section" class="hover:text-blue-600 transition-colors bg-indigo-50 px-3 py-1.5 rounded-full text-indigo-700 border border-indigo-200">Websites</a>
             </nav>
 
-            <!-- Right Buttons - Responsive -->
             <div class="flex items-center gap-1 sm:gap-2 shrink-0">
-                <!-- Updates Button -->
                 <button onclick="openUpdatesDrawer()" class="px-2 sm:px-3 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1 sm:gap-2 transition-all cursor-pointer shadow-lg shadow-emerald-600/20 whitespace-nowrap">
                     <i data-lucide="megaphone" class="w-3 h-3 sm:w-4 sm:h-4"></i>
                     <span class="hidden xs:inline">Updates</span>
                     <span class="xs:hidden">News</span>
                 </button>
                 
-                <!-- Company Directory Button -->
                 <button onclick="toggleMenu()" class="px-2 sm:px-3 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-900 text-[10px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1 sm:gap-2 transition-all cursor-pointer whitespace-nowrap">
                     <i data-lucide="menu" class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600"></i>
                     <span class="hidden xs:inline">Company</span>
@@ -292,7 +275,7 @@
         </div>
     </header>
 
-    <!-- UPDATES DRAWER - Premium Updates Panel -->
+    <!-- UPDATES DRAWER -->
     <div id="updatesDrawer" class="fixed inset-0 z-50 hidden overflow-hidden">
         <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeUpdatesDrawer()"></div>
         <div class="absolute right-0 top-0 h-full w-full max-w-4xl bg-white shadow-2xl overflow-y-auto">
@@ -311,7 +294,6 @@
                 </button>
             </div>
 
-            <!-- Search & Filters inside drawer - Responsive -->
             <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100">
                 <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                     <div class="relative flex-1 min-w-[120px] sm:min-w-[200px]">
@@ -328,7 +310,6 @@
                 </div>
             </div>
 
-            <!-- Updates Grid -->
             <div class="p-3 sm:p-6">
                 <div id="updatesGridDrawer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                     <div class="col-span-full text-center py-8 sm:py-12 text-slate-400 text-sm" id="updatesLoaderDrawer">Loading updates...</div>
@@ -337,7 +318,7 @@
         </div>
     </div>
 
-    <!-- Sliding Right-Side Menu Drawer -->
+    <!-- Side Drawer -->
     <div id="sideDrawer">
         <div class="drawer-backdrop" onclick="toggleMenu()"></div>
         <div class="drawer-content">
@@ -445,31 +426,23 @@
         </div>
     </div>
 
-    <!-- Professional Embed Modal Container -->
+    <!-- Embed Modal -->
     <div id="embedModal" class="fixed inset-0 z-50 hidden modal-blur flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all p-6 sm:p-8 space-y-4 sm:space-y-6">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 sm:pb-4">
-                <div class="flex items-center space-x-3" id="modalHeader">
-                    <!-- Dynamic Header -->
-                </div>
+                <div class="flex items-center space-x-3" id="modalHeader"></div>
                 <button onclick="closeEmbed()" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500 cursor-pointer">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
-
-            <div id="modalBody" class="text-sm text-slate-600 leading-relaxed max-h-96 overflow-y-auto space-y-4">
-                <!-- Dynamic Content Embedded Here -->
-            </div>
-
+            <div id="modalBody" class="text-sm text-slate-600 leading-relaxed max-h-96 overflow-y-auto space-y-4"></div>
             <div class="border-t border-slate-100 pt-3 sm:pt-4 flex justify-end">
-                <button onclick="closeEmbed()" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-slate-900 text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider hover:bg-blue-600 transition-colors cursor-pointer">
-                    Close Window
-                </button>
+                <button onclick="closeEmbed()" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-slate-900 text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider hover:bg-blue-600 transition-colors cursor-pointer">Close Window</button>
             </div>
         </div>
     </div>
 
-    <!-- Fullscreen Image Viewer -->
+    <!-- Image Viewer -->
     <div id="imageViewer" onclick="closeImageViewer()">
         <span class="close-btn">&times;</span>
         <img id="fullscreenImage" src="" alt="Fullscreen view">
@@ -482,23 +455,20 @@
                 <i data-lucide="check-circle-2" class="w-3 h-3 sm:w-4 sm:h-4"></i>
                 <span>Enterprise Grade Infrastructure</span>
             </div>
-
             <h1 class="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight leading-tight max-w-5xl mx-auto">
                 Architecting Enterprise Systems & <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Digital Platforms</span>
             </h1>
-
             <p class="max-w-3xl mx-auto text-sm sm:text-base md:text-lg text-slate-600 font-normal leading-relaxed">
                 STARDUST operates as a global technology organization delivering cloud communication engines, trading analytics, developer tooling, and interactive software.
             </p>
-
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4">
                 <a href="#ecosystem" class="w-full sm:w-auto px-4 sm:px-8 py-2.5 sm:py-4 rounded-xl font-bold text-[10px] sm:text-xs uppercase tracking-wider bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center space-x-2">
                     <span>Explore Products</span>
                     <i data-lucide="arrow-down" class="w-3 h-3 sm:w-4 sm:h-4"></i>
                 </a>
-                <a href="#full-ecosystem" class="w-full sm:w-auto px-4 sm:px-8 py-2.5 sm:py-4 rounded-xl font-bold text-[10px] sm:text-xs uppercase tracking-wider bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 transition-all flex items-center justify-center space-x-2 cursor-pointer">
-                    <i data-lucide="grid" class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600"></i>
-                    <span>Full Ecosystem</span>
+                <a href="#websites-section" class="w-full sm:w-auto px-4 sm:px-8 py-2.5 sm:py-4 rounded-xl font-bold text-[10px] sm:text-xs uppercase tracking-wider bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 transition-all flex items-center justify-center space-x-2 cursor-pointer">
+                    <i data-lucide="globe" class="w-3 h-3 sm:w-4 sm:h-4 text-indigo-600"></i>
+                    <span>Our Websites</span>
                 </a>
                 <button onclick="toggleMenu()" class="w-full sm:w-auto px-4 sm:px-8 py-2.5 sm:py-4 rounded-xl font-bold text-[10px] sm:text-xs uppercase tracking-wider bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 transition-all flex items-center justify-center space-x-2 cursor-pointer">
                     <i data-lucide="info" class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600"></i>
@@ -508,7 +478,7 @@
         </div>
     </section>
 
-    <!-- Verified Statistics -->
+    <!-- Statistics -->
     <section class="bg-slate-50 border-b border-slate-200/80 py-8 sm:py-12 px-4 sm:px-6">
         <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center font-mono">
             <div>
@@ -530,7 +500,7 @@
         </div>
     </section>
 
-    <!-- Ecosystem Product Cards Section -->
+    <!-- Ecosystem Product Cards -->
     <section id="ecosystem" class="py-16 sm:py-28 px-4 sm:px-6 max-w-7xl mx-auto">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-16 gap-4 sm:gap-6">
             <div>
@@ -661,36 +631,42 @@
         </div>
     </section>
 
-    <!-- ===== WEBSITES SECTION - NEW ===== -->
-    <section id="websites-section" class="py-16 sm:py-28 px-4 sm:px-6 bg-slate-50 border-t border-slate-200">
+    <!-- ===== WEBSITES SECTION - "Our Digital Presence" ===== -->
+    <section id="websites-section" class="py-16 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-indigo-50/50 to-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto">
-            <div class="flex items-center justify-between mb-6 sm:mb-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-16 gap-4 sm:gap-6">
                 <div>
                     <span class="text-[10px] sm:text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono flex items-center gap-2">
-                        <i data-lucide="globe" class="w-3 h-3 sm:w-4 sm:h-4"></i> Live Websites
+                        <i data-lucide="globe" class="w-3 h-3 sm:w-4 sm:h-4"></i> Our Digital Presence
                     </span>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-0.5 sm:mt-1">Our Digital Presence</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Websites published through Stardust Admin Console</p>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-0.5 sm:mt-1">Live Websites</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">All websites published through the Stardust ecosystem</p>
                 </div>
-                <a href="#ecosystem" class="text-xs sm:text-sm text-indigo-600 hover:text-indigo-700 font-bold flex items-center gap-1 sm:gap-2 transition-all group">
-                    View all products
-                    <i data-lucide="arrow-right" class="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"></i>
-                </a>
+                <div class="flex items-center gap-3">
+                    <span id="websiteCount" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-200">
+                        <i data-lucide="sparkles" class="w-3 h-3 inline mr-1"></i> 0 websites
+                    </span>
+                </div>
             </div>
 
+            <!-- Websites Grid - NO LOADING STATE, Always visible -->
             <div id="websitesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                <!-- Loading State -->
-                <div class="col-span-full text-center py-8 sm:py-12" id="websitesLoader">
-                    <div class="inline-flex items-center gap-3 text-slate-400">
-                        <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
-                        <span class="text-sm">Loading websites...</span>
+                <!-- Empty state - visible immediately -->
+                <div id="websitesEmptyState" class="col-span-full text-center py-12 sm:py-16">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-400 mb-4">
+                        <i data-lucide="globe" class="w-8 h-8"></i>
                     </div>
+                    <h3 class="text-sm font-bold text-slate-700">No websites published yet</h3>
+                    <p class="text-xs text-slate-400 mt-1">Websites published from the admin panel will appear here instantly.</p>
                 </div>
             </div>
+
+            <!-- AI Structured Data for Websites -->
+            <div id="websitesStructuredData"></div>
         </div>
     </section>
 
-    <!-- FULL ECOSYSTEM (Pehle jaisa) -->
+    <!-- FULL ECOSYSTEM -->
     <section id="full-ecosystem" class="py-16 sm:py-28 px-4 sm:px-6 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-10 sm:mb-16">
@@ -734,7 +710,7 @@
         </div>
     </section>
 
-    <!-- Company Roadmap Timeline Section -->
+    <!-- Company Roadmap Timeline -->
     <section id="timeline" class="py-16 sm:py-28 px-4 sm:px-6 bg-slate-50 border-t border-slate-200">
         <div class="max-w-4xl mx-auto space-y-10 sm:space-y-16">
             <div class="text-center space-y-1 sm:space-y-2">
@@ -767,7 +743,7 @@
         </div>
     </section>
 
-    <!-- ===== LATEST UPDATES - MAIN SCREEN ===== -->
+    <!-- ===== LATEST UPDATES ===== -->
     <section id="latest-updates" class="py-12 sm:py-16 px-4 sm:px-6 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between mb-6 sm:mb-8">
@@ -785,18 +761,19 @@
             </div>
 
             <div id="latestUpdatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                <!-- Loading State -->
-                <div class="col-span-full text-center py-8 sm:py-12" id="latestLoader">
-                    <div class="inline-flex items-center gap-3 text-slate-400">
-                        <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
-                        <span class="text-sm">Loading updates...</span>
+                <!-- Initial empty state - no loading -->
+                <div id="updatesEmptyState" class="col-span-full text-center py-8 sm:py-12">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-400 mb-4">
+                        <i data-lucide="inbox" class="w-8 h-8"></i>
                     </div>
+                    <h3 class="text-sm font-bold text-slate-700">No updates yet</h3>
+                    <p class="text-xs text-slate-400 mt-1">Updates will appear here automatically when published from the admin panel.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Support Contact Footer -->
+    <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 py-10 sm:py-16 px-4 sm:px-6 text-[10px] sm:text-xs">
         <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 mb-8 sm:mb-12">
             
@@ -868,7 +845,7 @@
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // Original functions - Bilkul pehle jaisa
+        // ===== CONTENT DATA =====
         const contentData = {
             mission: {
                 title: "Our Mission",
@@ -927,6 +904,7 @@
             }
         };
 
+        // ===== UI FUNCTIONS =====
         function toggleMenu() {
             const drawer = document.getElementById('sideDrawer');
             drawer.style.display = drawer.style.display === 'block' ? 'none' : 'block';
@@ -956,7 +934,6 @@
             document.getElementById('embedModal').classList.add('hidden');
         }
 
-        // ===== UPDATES DRAWER FUNCTIONS =====
         function openUpdatesDrawer() {
             document.getElementById('updatesDrawer').style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -972,7 +949,6 @@
             document.body.style.overflow = '';
         }
 
-        // ===== FULLSCREEN IMAGE VIEWER =====
         function openImageViewer(imageUrl) {
             const viewer = document.getElementById('imageViewer');
             document.getElementById('fullscreenImage').src = imageUrl;
@@ -983,6 +959,21 @@
         function closeImageViewer() {
             document.getElementById('imageViewer').style.display = 'none';
             document.body.style.overflow = '';
+        }
+
+        function toast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'error' ? 'alert-circle' : type === 'success' ? 'check-circle' : 'info';
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> ${message}`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
         // ===== FIREBASE CONFIG =====
@@ -1000,128 +991,29 @@
 
         // ===== GLOBAL VARIABLES =====
         let allUpdates = [];
+        let allWebsites = [];
         let currentFilter = 'all';
         let searchTerm = '';
         let isListening = false;
         let isLatestListenerActive = false;
         let isWebsitesListenerActive = false;
-        let latestUpdates = [];
-        let allWebsites = [];
         let lastUpdateCount = 0;
 
         // ===== DOM REFS =====
         const grid = document.getElementById('updatesGridDrawer');
-        const loader = document.getElementById('updatesLoaderDrawer');
         const searchInput = document.getElementById('updateSearchDrawer');
         const categoryBtns = document.querySelectorAll('#categoryFilterDrawer button');
 
-        // ===== WEBSITES FUNCTIONS =====
-        async function fetchWebsites() {
-            try {
-                const snapshot = await db.collection('websites')
-                    .orderBy('timestamp', 'desc')
-                    .get();
-                
-                const grid = document.getElementById('websitesGrid');
-                const loader = document.getElementById('websitesLoader');
-                
-                if (snapshot.empty) {
-                    grid.innerHTML = `
-                        <div class="col-span-full text-center py-8 text-slate-400 text-sm">
-                            <i data-lucide="globe" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-                            <p>No websites published yet. Check back soon!</p>
-                        </div>
-                    `;
-                    lucide.createIcons();
-                    return;
-                }
-                
-                allWebsites = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    allWebsites.push({
-                        id: doc.id,
-                        ...data,
-                        timestamp: data.timestamp?.toDate?.() || new Date()
-                    });
-                });
-                
-                renderWebsites();
-                
-            } catch (e) {
-                console.error('Error fetching websites:', e);
-                document.getElementById('websitesGrid').innerHTML = `
-                    <div class="col-span-full text-center py-8 text-red-400 text-sm">
-                        ⚠️ Could not load websites. Please refresh.
-                    </div>
-                `;
-            }
-        }
-
-        function renderWebsites() {
-            const grid = document.getElementById('websitesGrid');
-            
-            if (allWebsites.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-slate-400 text-sm">
-                        <i data-lucide="globe" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-                        <p>No websites published yet. Check back soon!</p>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            // Filter only published websites for main display
-            const publishedWebsites = allWebsites.filter(w => w.status === 'Published');
-            
-            if (publishedWebsites.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-slate-400 text-sm">
-                        <i data-lucide="globe" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-                        <p>No published websites yet. Check back soon!</p>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            grid.innerHTML = publishedWebsites.map(w => `
-                <div class="corp-card website-card p-4 sm:p-6 rounded-2xl flex flex-col">
-                    <div class="flex items-center gap-3 mb-2 sm:mb-3">
-                        ${w.imageUrl ? 
-                            `<img src="${w.imageUrl}" class="w-12 h-12 rounded-xl object-cover" />` : 
-                            `<div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600"><i data-lucide="globe" class="w-6 h-6"></i></div>`
-                        }
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-bold text-slate-900 truncate text-sm sm:text-base">${w.name || 'Untitled'}</h3>
-                            <span class="text-[10px] sm:text-xs text-slate-400">${w.type || 'Website'}</span>
-                        </div>
-                        <span class="website-status-badge px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold uppercase">Live</span>
-                    </div>
-                    <p class="text-[10px] sm:text-xs text-slate-500 line-clamp-2 flex-1">${w.description || 'No description available.'}</p>
-                    ${w.url ? `
-                        <a href="${w.url}" target="_blank" class="mt-2 sm:mt-3 text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1 group">
-                            Visit Website
-                            <i data-lucide="external-link" class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
-                        </a>
-                    ` : ''}
-                    <div class="mt-2 sm:mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400 border-t border-slate-100 pt-2 sm:pt-3">
-                        <span>Published: ${w.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) || ''}</span>
-                    </div>
-                </div>
-            `).join('');
-            
-            lucide.createIcons();
-        }
-
-        // ===== WEBSITES REAL-TIME LISTENER =====
+        // ============================================================
+        // ===== WEBSITES - REAL-TIME + NO LOADING =====
+        // ============================================================
         function startWebsitesListener() {
             if (isWebsitesListenerActive) return;
             isWebsitesListenerActive = true;
             
             console.log('🔄 Starting real-time websites listener...');
             
+            // Listen to all websites (including drafts, but we'll filter published)
             db.collection('websites')
                 .orderBy('timestamp', 'desc')
                 .onSnapshot((snapshot) => {
@@ -1130,6 +1022,7 @@
                     if (snapshot.empty) {
                         allWebsites = [];
                         renderWebsites();
+                        updateWebsiteCount(0);
                         return;
                     }
                     
@@ -1151,198 +1044,124 @@
                         });
                     });
                     
+                    const publishedCount = allWebsites.filter(w => w.status === 'Published').length;
+                    updateWebsiteCount(publishedCount);
                     renderWebsites();
+                    generateWebsitesStructuredData();
                     
                 }, (error) => {
                     console.error('❌ Websites listener error:', error);
                 });
         }
 
-        // ===== LATEST UPDATES FUNCTIONS =====
-        async function fetchLatestUpdates() {
-            try {
-                const snapshot = await db.collection('updates')
-                    .orderBy('timestamp', 'desc')
-                    .limit(3)
-                    .get();
-                
-                const grid = document.getElementById('latestUpdatesGrid');
-                const loader = document.getElementById('latestLoader');
-                
-                if (snapshot.empty) {
+        function updateWebsiteCount(count) {
+            const el = document.getElementById('websiteCount');
+            if (el) {
+                el.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3 inline mr-1"></i> ${count} website${count !== 1 ? 's' : ''}`;
+                lucide.createIcons();
+            }
+        }
+
+        function renderWebsites() {
+            const grid = document.getElementById('websitesGrid');
+            const emptyState = document.getElementById('websitesEmptyState');
+            
+            if (!grid) return;
+            
+            // Filter only published websites
+            const publishedWebsites = allWebsites.filter(w => w.status === 'Published');
+            
+            if (publishedWebsites.length === 0) {
+                // Show empty state
+                if (emptyState) {
+                    grid.innerHTML = emptyState.outerHTML;
+                    lucide.createIcons();
+                } else {
                     grid.innerHTML = `
-                        <div class="col-span-full text-center py-8 text-slate-400 text-sm">
-                            <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-                            <p>No updates yet. Check back soon!</p>
+                        <div class="col-span-full text-center py-12 sm:py-16">
+                            <div class="w-16 h-16 mx-auto rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-400 mb-4">
+                                <i data-lucide="globe" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-slate-700">No websites published yet</h3>
+                            <p class="text-xs text-slate-400 mt-1">Websites published from the admin panel will appear here instantly.</p>
                         </div>
                     `;
                     lucide.createIcons();
-                    return;
                 }
-                
-                latestUpdates = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    let timestamp = new Date();
-                    if (data.timestamp) {
-                        if (data.timestamp.toDate) {
-                            timestamp = data.timestamp.toDate();
-                        } else if (data.timestamp instanceof Date) {
-                            timestamp = data.timestamp;
+                return;
+            }
+
+            // Render websites - same style as ecosystem cards
+            grid.innerHTML = publishedWebsites.map(w => `
+                <div class="corp-card website-card p-5 sm:p-6 rounded-2xl flex flex-col">
+                    <div class="flex items-center gap-3 mb-3">
+                        ${w.imageUrl ? 
+                            `<img src="${w.imageUrl}" class="w-12 h-12 rounded-xl object-cover border border-slate-200" />` : 
+                            `<div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-500 border border-indigo-100"><i data-lucide="globe" class="w-6 h-6"></i></div>`
                         }
-                    }
-                    latestUpdates.push({
-                        id: doc.id,
-                        ...data,
-                        timestamp: timestamp
-                    });
-                });
-                
-                renderLatestUpdates();
-                
-            } catch (e) {
-                console.error('Error fetching latest updates:', e);
-                document.getElementById('latestUpdatesGrid').innerHTML = `
-                    <div class="col-span-full text-center py-8 text-red-400 text-sm">
-                        ⚠️ Could not load updates. Please refresh.
-                    </div>
-                `;
-            }
-        }
-
-        function renderLatestUpdates() {
-            const grid = document.getElementById('latestUpdatesGrid');
-            
-            if (!grid) {
-                console.error('latestUpdatesGrid not found');
-                return;
-            }
-            
-            if (latestUpdates.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-slate-400 text-sm">
-                        <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-                        <p>No updates yet. Check back soon!</p>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            console.log('Rendering updates:', latestUpdates);
-
-            grid.innerHTML = latestUpdates.map(up => {
-                const statusColor = up.status ? getStatusColor(up.status) : 'slate';
-                const imageHtml = up.imageUrl ? `
-                    <div class="mt-2 sm:mt-3 rounded-lg overflow-hidden">
-                        <img src="${up.imageUrl}" alt="${up.title || 'Update'}" class="w-full h-24 sm:h-32 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" />
-                    </div>
-                ` : '';
-                
-                return `
-                    <div class="corp-card latest-card p-4 sm:p-6 rounded-2xl flex flex-col cursor-pointer hover:shadow-lg transition-all" onclick="openUpdateDetailDrawer('${up.id}')">
-                        ${up.featured ? `<div class="featured-badge self-start px-2 py-0.5 rounded mb-1.5 sm:mb-2">★ FEATURED</div>` : ''}
-                        <div class="flex items-center justify-between mb-1.5 sm:mb-2">
-                            <span class="badge-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold bg-${statusColor}-100 text-${statusColor}-700 border border-${statusColor}-200 uppercase text-[8px] sm:text-[10px]">${up.status || 'Planning'}</span>
-                            <span class="text-[8px] sm:text-[10px] font-mono text-slate-400">${up.category || 'General'}</span>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-slate-900 truncate text-sm sm:text-base">${w.name || 'Untitled'}</h3>
+                            <span class="text-[10px] sm:text-xs text-slate-400">${w.type || 'Website'}</span>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-tight line-clamp-2">${up.title || 'Untitled'}</h3>
-                        <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">${(up.content || '').substring(0, 100)}${(up.content || '').length > 100 ? '...' : ''}</p>
-                        ${imageHtml}
-                        <div class="mt-2 sm:mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400">
-                            <span class="flex items-center gap-1">
-                                <i data-lucide="calendar" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i>
-                                ${up.timestamp ? up.timestamp.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : ''}
-                            </span>
-                            ${up.tags && up.tags.length ? `<div class="flex gap-1">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[9px]">#${t}</span>`).join('')}</div>` : ''}
-                        </div>
+                        <span class="website-status-badge px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold uppercase text-[9px]">Live</span>
                     </div>
-                `;
-            }).join('');
+                    <p class="text-[10px] sm:text-xs text-slate-500 line-clamp-2 flex-1">${w.description || 'No description available.'}</p>
+                    ${w.url ? `
+                        <a href="${w.url}" target="_blank" class="mt-3 text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1 group">
+                            Visit Website
+                            <i data-lucide="external-link" class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                        </a>
+                    ` : ''}
+                    <div class="mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400 border-t border-slate-100 pt-2 sm:pt-3">
+                        <span>Published: ${w.timestamp ? w.timestamp.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : ''}</span>
+                    </div>
+                </div>
+            `).join('');
             
             lucide.createIcons();
-            
-            if (latestUpdates.length > 0) {
-                updateLatestAIStructuredData(latestUpdates);
-            }
         }
 
-        function updateLatestAIStructuredData(updates) {
-            const oldScript = document.querySelector('script[data-stardust-latest-ld]');
-            if (oldScript) oldScript.remove();
+        // ===== WEBSITES STRUCTURED DATA FOR AI =====
+        function generateWebsitesStructuredData() {
+            const container = document.getElementById('websitesStructuredData');
+            if (!container) return;
+            
+            const publishedWebsites = allWebsites.filter(w => w.status === 'Published');
+            
+            if (publishedWebsites.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
             
             const script = document.createElement('script');
-            script.setAttribute('data-stardust-latest-ld', 'true');
             script.type = 'application/ld+json';
             script.textContent = JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "ItemList",
-                "name": "Stardust Latest 3 Updates",
-                "description": "Latest 3 updates from Stardust Corporation - AI accessible",
+                "name": "Stardust Live Websites",
+                "description": "All live websites published under the Stardust ecosystem",
                 "dateModified": new Date().toISOString(),
-                "numberOfItems": updates.length,
-                "itemListElement": updates.map((up, index) => ({
+                "numberOfItems": publishedWebsites.length,
+                "itemListElement": publishedWebsites.map((w, index) => ({
                     "@type": "ListItem",
                     "position": index + 1,
                     "item": {
-                        "@type": "Article",
-                        "headline": up.title,
-                        "description": up.content?.substring(0, 300) || '',
-                        "datePublished": up.timestamp?.toISOString() || new Date().toISOString(),
-                        "category": up.category || 'General',
-                        "status": up.status || 'Planning',
-                        "image": up.imageUrl || '',
-                        "tags": up.tags || []
+                        "@type": "WebSite",
+                        "name": w.name || 'Untitled',
+                        "description": w.description || 'No description available.',
+                        "url": w.url || '',
+                        "image": w.imageUrl || '',
+                        "datePublished": w.timestamp?.toISOString() || new Date().toISOString()
                     }
                 }))
             });
-            document.head.appendChild(script);
+            container.innerHTML = '';
+            container.appendChild(script);
         }
 
-        function startLatestUpdatesListener() {
-            if (isLatestListenerActive) return;
-            isLatestListenerActive = true;
-            
-            console.log('🔄 Starting real-time updates listener for main page...');
-            
-            db.collection('updates')
-                .orderBy('timestamp', 'desc')
-                .limit(3)
-                .onSnapshot((snapshot) => {
-                    console.log('📡 Latest updates snapshot received, size:', snapshot.size);
-                    
-                    if (snapshot.empty) {
-                        latestUpdates = [];
-                        renderLatestUpdates();
-                        return;
-                    }
-                    
-                    latestUpdates = [];
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        let timestamp = new Date();
-                        if (data.timestamp) {
-                            if (data.timestamp.toDate) {
-                                timestamp = data.timestamp.toDate();
-                            } else if (data.timestamp instanceof Date) {
-                                timestamp = data.timestamp;
-                            }
-                        }
-                        latestUpdates.push({
-                            id: doc.id,
-                            ...data,
-                            timestamp: timestamp
-                        });
-                    });
-                    
-                    renderLatestUpdates();
-                    
-                }, (error) => {
-                    console.error('❌ Latest updates listener error:', error);
-                });
-        }
-
-        // ===== UPDATES DRAWER FUNCTIONS =====
+        // ============================================================
+        // ===== UPDATES FUNCTIONS =====
+        // ============================================================
         function getStatusColor(status) {
             const map = { 'Planning':'slate', 'In Development':'amber', 'Testing':'blue', 'Released':'emerald', 'Paused':'rose' };
             return map[status] || 'slate';
@@ -1528,11 +1347,7 @@
 
         // ===== UPDATE DETAIL DRAWER =====
         async function openUpdateDetailDrawer(id) {
-            let up = latestUpdates.find(u => u.id === id);
-            
-            if (!up) {
-                up = allUpdates.find(u => u.id === id);
-            }
+            let up = allUpdates.find(u => u.id === id);
             
             if (!up) {
                 try {
@@ -1612,20 +1427,94 @@
             lucide.createIcons();
         }
 
-        // ===== TOAST FUNCTION =====
-        function toast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            const icon = type === 'error' ? 'alert-circle' : type === 'success' ? 'check-circle' : 'info';
-            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> ${message}`;
-            document.body.appendChild(toast);
+        // ===== LATEST UPDATES - MAIN SCREEN (NO LOADING) =====
+        function renderLatestUpdates() {
+            const grid = document.getElementById('latestUpdatesGrid');
+            
+            if (!grid) return;
+            
+            // We need to get latest 3 from allUpdates
+            const latest = allUpdates.slice(0, 3);
+            
+            if (latest.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 sm:py-12">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-400 mb-4">
+                            <i data-lucide="inbox" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-700">No updates yet</h3>
+                        <p class="text-xs text-slate-400 mt-1">Updates will appear here automatically when published from the admin panel.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            grid.innerHTML = latest.map(up => {
+                const statusColor = up.status ? getStatusColor(up.status) : 'slate';
+                const imageHtml = up.imageUrl ? `
+                    <div class="mt-2 sm:mt-3 rounded-lg overflow-hidden">
+                        <img src="${up.imageUrl}" alt="${up.title || 'Update'}" class="w-full h-24 sm:h-32 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" />
+                    </div>
+                ` : '';
+                
+                return `
+                    <div class="corp-card latest-card p-4 sm:p-6 rounded-2xl flex flex-col cursor-pointer hover:shadow-lg transition-all" onclick="openUpdateDetailDrawer('${up.id}')">
+                        ${up.featured ? `<div class="featured-badge self-start px-2 py-0.5 rounded mb-1.5 sm:mb-2">★ FEATURED</div>` : ''}
+                        <div class="flex items-center justify-between mb-1.5 sm:mb-2">
+                            <span class="badge-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold bg-${statusColor}-100 text-${statusColor}-700 border border-${statusColor}-200 uppercase text-[8px] sm:text-[10px]">${up.status || 'Planning'}</span>
+                            <span class="text-[8px] sm:text-[10px] font-mono text-slate-400">${up.category || 'General'}</span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-tight line-clamp-2">${up.title || 'Untitled'}</h3>
+                        <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">${(up.content || '').substring(0, 100)}${(up.content || '').length > 100 ? '...' : ''}</p>
+                        ${imageHtml}
+                        <div class="mt-2 sm:mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i>
+                                ${up.timestamp ? up.timestamp.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : ''}
+                            </span>
+                            ${up.tags && up.tags.length ? `<div class="flex gap-1">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[9px]">#${t}</span>`).join('')}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
             lucide.createIcons();
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(-50%) translateY(20px)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            updateLatestAIStructuredData(latest);
+        }
+
+        function updateLatestAIStructuredData(updates) {
+            const oldScript = document.querySelector('script[data-stardust-latest-ld]');
+            if (oldScript) oldScript.remove();
+            
+            if (updates.length === 0) return;
+            
+            const script = document.createElement('script');
+            script.setAttribute('data-stardust-latest-ld', 'true');
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Stardust Latest 3 Updates",
+                "description": "Latest 3 updates from Stardust Corporation - AI accessible",
+                "dateModified": new Date().toISOString(),
+                "numberOfItems": updates.length,
+                "itemListElement": updates.map((up, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "item": {
+                        "@type": "Article",
+                        "headline": up.title,
+                        "description": up.content?.substring(0, 300) || '',
+                        "datePublished": up.timestamp?.toISOString() || new Date().toISOString(),
+                        "category": up.category || 'General',
+                        "status": up.status || 'Planning',
+                        "image": up.imageUrl || '',
+                        "tags": up.tags || []
+                    }
+                }))
+            });
+            document.head.appendChild(script);
         }
 
         // ===== CATEGORY FILTER =====
@@ -1658,19 +1547,6 @@
             }));
         };
 
-        window.getStardustLatestUpdates = function() {
-            return latestUpdates.map(u => ({
-                title: u.title,
-                content: u.content,
-                category: u.category,
-                status: u.status,
-                featured: u.featured,
-                tags: u.tags || [],
-                date: u.timestamp?.toISOString() || new Date().toISOString(),
-                imageUrl: u.imageUrl || null
-            }));
-        };
-
         window.getStardustWebsites = function() {
             return allWebsites.filter(w => w.status === 'Published').map(w => ({
                 name: w.name,
@@ -1686,25 +1562,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
             
-            // Fetch websites
-            fetchWebsites();
-            
-            // Start websites real-time listener
+            // Start websites real-time listener (shows instantly)
             startWebsitesListener();
             
-            // Fetch latest 3 updates for main screen
-            fetchLatestUpdates();
+            // Start updates real-time listener
+            startRealtimeListener();
             
-            // Start real-time listener for latest updates
-            startLatestUpdatesListener();
+            // Initial render for latest updates
+            renderLatestUpdates();
             
-            console.log('🌟 STARDUST MAIN WEBSITE v2.0');
+            console.log('🌟 STARDUST MAIN WEBSITE v3.0 - AI Ready');
             console.log('📡 Call window.getStardustUpdates() to get ALL updates');
-            console.log('📡 Call window.getStardustLatestUpdates() to get LATEST 3 updates');
             console.log('📡 Call window.getStardustWebsites() to get PUBLISHED websites');
-            console.log('🔄 Real-time updates enabled - new posts appear instantly!');
-            console.log('🌐 Websites auto-sync from Admin Panel!');
-            console.log('🤖 AI accessible: Structured data available for crawlers');
+            console.log('🔄 Real-time sync enabled - new content appears instantly!');
+            console.log('🤖 AI accessible: Structured data for all content');
+            console.log('🌐 No loading states - content always visible to AI crawlers');
         });
     </script>
 </body>
