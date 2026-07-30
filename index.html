@@ -231,6 +231,20 @@
         .view-all-link:hover {
             gap: 0.75rem;
         }
+
+        /* Website cards */
+        .website-card {
+            transition: all 0.3s ease;
+        }
+        .website-card:hover {
+            transform: translateY(-4px);
+            border-color: #6366f1;
+            box-shadow: 0 12px 30px -8px rgba(99, 102, 241, 0.15);
+        }
+        .website-status-badge {
+            font-size: 0.55rem;
+            letter-spacing: 0.05em;
+        }
     </style>
 </head>
 <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
@@ -647,8 +661,37 @@
         </div>
     </section>
 
-    <!-- FULL ECOSYSTEM -->
-    <section id="full-ecosystem" class="py-16 sm:py-28 px-4 sm:px-6 bg-slate-50 border-t border-slate-200">
+    <!-- ===== WEBSITES SECTION - NEW ===== -->
+    <section id="websites-section" class="py-16 sm:py-28 px-4 sm:px-6 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between mb-6 sm:mb-10">
+                <div>
+                    <span class="text-[10px] sm:text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono flex items-center gap-2">
+                        <i data-lucide="globe" class="w-3 h-3 sm:w-4 sm:h-4"></i> Live Websites
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-0.5 sm:mt-1">Our Digital Presence</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Websites published through Stardust Admin Console</p>
+                </div>
+                <a href="#ecosystem" class="text-xs sm:text-sm text-indigo-600 hover:text-indigo-700 font-bold flex items-center gap-1 sm:gap-2 transition-all group">
+                    View all products
+                    <i data-lucide="arrow-right" class="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <div id="websitesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Loading State -->
+                <div class="col-span-full text-center py-8 sm:py-12" id="websitesLoader">
+                    <div class="inline-flex items-center gap-3 text-slate-400">
+                        <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
+                        <span class="text-sm">Loading websites...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FULL ECOSYSTEM (Pehle jaisa) -->
+    <section id="full-ecosystem" class="py-16 sm:py-28 px-4 sm:px-6 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-10 sm:mb-16">
                 <span class="text-[10px] sm:text-xs font-bold text-blue-600 uppercase tracking-widest font-mono">Complete Index</span>
@@ -724,8 +767,7 @@
         </div>
     </section>
 
-    <!-- ===== LATEST UPDATES - MAIN SCREEN (3 POSTS) ===== -->
-    <!-- Yeh section Timeline ke neeche aur Footer ke uper hai -->
+    <!-- ===== LATEST UPDATES - MAIN SCREEN ===== -->
     <section id="latest-updates" class="py-12 sm:py-16 px-4 sm:px-6 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between mb-6 sm:mb-8">
@@ -826,7 +868,7 @@
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // Original functions
+        // Original functions - Bilkul pehle jaisa
         const contentData = {
             mission: {
                 title: "Our Mission",
@@ -943,7 +985,7 @@
             document.body.style.overflow = '';
         }
 
-        // ===== FIREBASE UPDATES LOGIC =====
+        // ===== FIREBASE CONFIG =====
         const firebaseConfig = {
             apiKey: "AIzaSyAL0FSX7YfhQ-IoqE3a7axcLjgN7cPySM0",
             authDomain: "stardust-official.firebaseapp.com",
@@ -956,19 +998,167 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // ===== GLOBAL VARIABLES =====
         let allUpdates = [];
         let currentFilter = 'all';
         let searchTerm = '';
         let isListening = false;
         let isLatestListenerActive = false;
+        let isWebsitesListenerActive = false;
         let latestUpdates = [];
+        let allWebsites = [];
+        let lastUpdateCount = 0;
 
+        // ===== DOM REFS =====
         const grid = document.getElementById('updatesGridDrawer');
         const loader = document.getElementById('updatesLoaderDrawer');
         const searchInput = document.getElementById('updateSearchDrawer');
         const categoryBtns = document.querySelectorAll('#categoryFilterDrawer button');
 
-        // ===== LATEST 3 UPDATES - MAIN SCREEN =====
+        // ===== WEBSITES FUNCTIONS =====
+        async function fetchWebsites() {
+            try {
+                const snapshot = await db.collection('websites')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+                
+                const grid = document.getElementById('websitesGrid');
+                const loader = document.getElementById('websitesLoader');
+                
+                if (snapshot.empty) {
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-8 text-slate-400 text-sm">
+                            <i data-lucide="globe" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                            <p>No websites published yet. Check back soon!</p>
+                        </div>
+                    `;
+                    lucide.createIcons();
+                    return;
+                }
+                
+                allWebsites = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    allWebsites.push({
+                        id: doc.id,
+                        ...data,
+                        timestamp: data.timestamp?.toDate?.() || new Date()
+                    });
+                });
+                
+                renderWebsites();
+                
+            } catch (e) {
+                console.error('Error fetching websites:', e);
+                document.getElementById('websitesGrid').innerHTML = `
+                    <div class="col-span-full text-center py-8 text-red-400 text-sm">
+                        ⚠️ Could not load websites. Please refresh.
+                    </div>
+                `;
+            }
+        }
+
+        function renderWebsites() {
+            const grid = document.getElementById('websitesGrid');
+            
+            if (allWebsites.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-slate-400 text-sm">
+                        <i data-lucide="globe" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                        <p>No websites published yet. Check back soon!</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Filter only published websites for main display
+            const publishedWebsites = allWebsites.filter(w => w.status === 'Published');
+            
+            if (publishedWebsites.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-slate-400 text-sm">
+                        <i data-lucide="globe" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                        <p>No published websites yet. Check back soon!</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            grid.innerHTML = publishedWebsites.map(w => `
+                <div class="corp-card website-card p-4 sm:p-6 rounded-2xl flex flex-col">
+                    <div class="flex items-center gap-3 mb-2 sm:mb-3">
+                        ${w.imageUrl ? 
+                            `<img src="${w.imageUrl}" class="w-12 h-12 rounded-xl object-cover" />` : 
+                            `<div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600"><i data-lucide="globe" class="w-6 h-6"></i></div>`
+                        }
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-slate-900 truncate text-sm sm:text-base">${w.name || 'Untitled'}</h3>
+                            <span class="text-[10px] sm:text-xs text-slate-400">${w.type || 'Website'}</span>
+                        </div>
+                        <span class="website-status-badge px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold uppercase">Live</span>
+                    </div>
+                    <p class="text-[10px] sm:text-xs text-slate-500 line-clamp-2 flex-1">${w.description || 'No description available.'}</p>
+                    ${w.url ? `
+                        <a href="${w.url}" target="_blank" class="mt-2 sm:mt-3 text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1 group">
+                            Visit Website
+                            <i data-lucide="external-link" class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                        </a>
+                    ` : ''}
+                    <div class="mt-2 sm:mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400 border-t border-slate-100 pt-2 sm:pt-3">
+                        <span>Published: ${w.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) || ''}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        // ===== WEBSITES REAL-TIME LISTENER =====
+        function startWebsitesListener() {
+            if (isWebsitesListenerActive) return;
+            isWebsitesListenerActive = true;
+            
+            console.log('🔄 Starting real-time websites listener...');
+            
+            db.collection('websites')
+                .orderBy('timestamp', 'desc')
+                .onSnapshot((snapshot) => {
+                    console.log('📡 Websites snapshot received, size:', snapshot.size);
+                    
+                    if (snapshot.empty) {
+                        allWebsites = [];
+                        renderWebsites();
+                        return;
+                    }
+                    
+                    allWebsites = [];
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        let timestamp = new Date();
+                        if (data.timestamp) {
+                            if (data.timestamp.toDate) {
+                                timestamp = data.timestamp.toDate();
+                            } else if (data.timestamp instanceof Date) {
+                                timestamp = data.timestamp;
+                            }
+                        }
+                        allWebsites.push({
+                            id: doc.id,
+                            ...data,
+                            timestamp: timestamp
+                        });
+                    });
+                    
+                    renderWebsites();
+                    
+                }, (error) => {
+                    console.error('❌ Websites listener error:', error);
+                });
+        }
+
+        // ===== LATEST UPDATES FUNCTIONS =====
         async function fetchLatestUpdates() {
             try {
                 const snapshot = await db.collection('updates')
@@ -993,10 +1183,18 @@
                 latestUpdates = [];
                 snapshot.forEach(doc => {
                     const data = doc.data();
+                    let timestamp = new Date();
+                    if (data.timestamp) {
+                        if (data.timestamp.toDate) {
+                            timestamp = data.timestamp.toDate();
+                        } else if (data.timestamp instanceof Date) {
+                            timestamp = data.timestamp;
+                        }
+                    }
                     latestUpdates.push({
                         id: doc.id,
                         ...data,
-                        timestamp: data.timestamp?.toDate?.() || new Date()
+                        timestamp: timestamp
                     });
                 });
                 
@@ -1015,6 +1213,11 @@
         function renderLatestUpdates() {
             const grid = document.getElementById('latestUpdatesGrid');
             
+            if (!grid) {
+                console.error('latestUpdatesGrid not found');
+                return;
+            }
+            
             if (latestUpdates.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full text-center py-8 text-slate-400 text-sm">
@@ -1026,39 +1229,45 @@
                 return;
             }
 
-            grid.innerHTML = latestUpdates.map(up => `
-                <div class="corp-card latest-card p-4 sm:p-6 rounded-2xl flex flex-col cursor-pointer hover:shadow-lg transition-all" onclick="openUpdateDetailDrawer('${up.id}')">
-                    ${up.featured ? `<div class="featured-badge self-start px-2 py-0.5 rounded mb-1.5 sm:mb-2">★ FEATURED</div>` : ''}
-                    <div class="flex items-center justify-between mb-1.5 sm:mb-2">
-                        <span class="badge-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold bg-${getStatusColor(up.status)}-100 text-${getStatusColor(up.status)}-700 border border-${getStatusColor(up.status)}-200 uppercase text-[8px] sm:text-[10px]">${up.status || 'Planning'}</span>
-                        <span class="text-[8px] sm:text-[10px] font-mono text-slate-400">${up.category || 'General'}</span>
+            console.log('Rendering updates:', latestUpdates);
+
+            grid.innerHTML = latestUpdates.map(up => {
+                const statusColor = up.status ? getStatusColor(up.status) : 'slate';
+                const imageHtml = up.imageUrl ? `
+                    <div class="mt-2 sm:mt-3 rounded-lg overflow-hidden">
+                        <img src="${up.imageUrl}" alt="${up.title || 'Update'}" class="w-full h-24 sm:h-32 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" />
                     </div>
-                    <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-tight line-clamp-2">${up.title}</h3>
-                    <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">${up.content?.substring(0, 100) || ''}${up.content?.length > 100 ? '...' : ''}</p>
-                    ${up.imageUrl ? `
-                        <div class="mt-2 sm:mt-3 rounded-lg overflow-hidden">
-                            <img src="${up.imageUrl}" alt="${up.title}" class="w-full h-24 sm:h-32 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" />
+                ` : '';
+                
+                return `
+                    <div class="corp-card latest-card p-4 sm:p-6 rounded-2xl flex flex-col cursor-pointer hover:shadow-lg transition-all" onclick="openUpdateDetailDrawer('${up.id}')">
+                        ${up.featured ? `<div class="featured-badge self-start px-2 py-0.5 rounded mb-1.5 sm:mb-2">★ FEATURED</div>` : ''}
+                        <div class="flex items-center justify-between mb-1.5 sm:mb-2">
+                            <span class="badge-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold bg-${statusColor}-100 text-${statusColor}-700 border border-${statusColor}-200 uppercase text-[8px] sm:text-[10px]">${up.status || 'Planning'}</span>
+                            <span class="text-[8px] sm:text-[10px] font-mono text-slate-400">${up.category || 'General'}</span>
                         </div>
-                    ` : ''}
-                    <div class="mt-2 sm:mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400">
-                        <span class="flex items-center gap-1">
-                            <i data-lucide="calendar" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i>
-                            ${up.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) || ''}
-                        </span>
-                        ${up.tags ? `<div class="flex gap-1">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[9px]">#${t}</span>`).join('')}</div>` : ''}
+                        <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-tight line-clamp-2">${up.title || 'Untitled'}</h3>
+                        <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">${(up.content || '').substring(0, 100)}${(up.content || '').length > 100 ? '...' : ''}</p>
+                        ${imageHtml}
+                        <div class="mt-2 sm:mt-3 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i>
+                                ${up.timestamp ? up.timestamp.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : ''}
+                            </span>
+                            ${up.tags && up.tags.length ? `<div class="flex gap-1">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[9px]">#${t}</span>`).join('')}</div>` : ''}
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
             
             lucide.createIcons();
             
-            // Update AI structured data with latest 3
-            updateLatestAIStructuredData(latestUpdates);
+            if (latestUpdates.length > 0) {
+                updateLatestAIStructuredData(latestUpdates);
+            }
         }
 
-        // ===== AI STRUCTURED DATA FOR LATEST 3 =====
         function updateLatestAIStructuredData(updates) {
-            // Remove old script
             const oldScript = document.querySelector('script[data-stardust-latest-ld]');
             if (oldScript) oldScript.remove();
             
@@ -1090,15 +1299,18 @@
             document.head.appendChild(script);
         }
 
-        // ===== REAL-TIME LISTENER FOR LATEST UPDATES =====
         function startLatestUpdatesListener() {
             if (isLatestListenerActive) return;
             isLatestListenerActive = true;
+            
+            console.log('🔄 Starting real-time updates listener for main page...');
             
             db.collection('updates')
                 .orderBy('timestamp', 'desc')
                 .limit(3)
                 .onSnapshot((snapshot) => {
+                    console.log('📡 Latest updates snapshot received, size:', snapshot.size);
+                    
                     if (snapshot.empty) {
                         latestUpdates = [];
                         renderLatestUpdates();
@@ -1108,35 +1320,112 @@
                     latestUpdates = [];
                     snapshot.forEach(doc => {
                         const data = doc.data();
+                        let timestamp = new Date();
+                        if (data.timestamp) {
+                            if (data.timestamp.toDate) {
+                                timestamp = data.timestamp.toDate();
+                            } else if (data.timestamp instanceof Date) {
+                                timestamp = data.timestamp;
+                            }
+                        }
                         latestUpdates.push({
                             id: doc.id,
                             ...data,
-                            timestamp: data.timestamp?.toDate?.() || new Date()
+                            timestamp: timestamp
                         });
                     });
                     
                     renderLatestUpdates();
                     
                 }, (error) => {
-                    console.error('Latest updates listener error:', error);
+                    console.error('❌ Latest updates listener error:', error);
                 });
         }
 
-        // ===== EXPOSE LATEST UPDATES FOR AI =====
-        window.getStardustLatestUpdates = function() {
-            return latestUpdates.map(u => ({
-                title: u.title,
-                content: u.content,
-                category: u.category,
-                status: u.status,
-                featured: u.featured,
-                tags: u.tags || [],
-                date: u.timestamp?.toISOString() || new Date().toISOString(),
-                imageUrl: u.imageUrl || null
-            }));
-        };
+        // ===== UPDATES DRAWER FUNCTIONS =====
+        function getStatusColor(status) {
+            const map = { 'Planning':'slate', 'In Development':'amber', 'Testing':'blue', 'Released':'emerald', 'Paused':'rose' };
+            return map[status] || 'slate';
+        }
 
-        // ===== REAL-TIME LISTENER FOR ALL UPDATES =====
+        async function fetchUpdatesDrawer() {
+            try {
+                const snapshot = await db.collection('updates')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+                if (snapshot.empty) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No updates yet. Check back soon.</div>`;
+                    return;
+                }
+                allUpdates = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    let timestamp = new Date();
+                    if (data.timestamp) {
+                        if (data.timestamp.toDate) {
+                            timestamp = data.timestamp.toDate();
+                        } else if (data.timestamp instanceof Date) {
+                            timestamp = data.timestamp;
+                        }
+                    }
+                    allUpdates.push({
+                        id: doc.id,
+                        ...data,
+                        timestamp: timestamp
+                    });
+                });
+                lastUpdateCount = allUpdates.length;
+                renderUpdatesDrawer();
+                startRealtimeListener();
+            } catch (e) {
+                console.error('Firestore error:', e);
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-red-400 text-sm">⚠️ Could not load updates. Please try again later.</div>`;
+            }
+        }
+
+        function renderUpdatesDrawer() {
+            const filtered = allUpdates.filter(up => {
+                const matchCategory = currentFilter === 'all' || up.category === currentFilter;
+                const matchSearch = up.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    up.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    up.tags?.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
+                return matchCategory && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No updates match your filters.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(up => {
+                const statusColor = up.status ? getStatusColor(up.status) : 'slate';
+                const imageHtml = up.imageUrl ? `
+                    <div class="mt-2 sm:mt-3 rounded-lg overflow-hidden">
+                        <img src="${up.imageUrl}" alt="${up.title || 'Update'}" class="w-full h-28 sm:h-40 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" />
+                    </div>
+                ` : '';
+                
+                return `
+                    <div class="corp-card update-card p-4 sm:p-6 rounded-2xl flex flex-col cursor-pointer" onclick="openUpdateDetailDrawer('${up.id}')">
+                        ${up.featured ? `<div class="featured-badge self-start px-2 py-0.5 rounded mb-1.5 sm:mb-2">★ FEATURED</div>` : ''}
+                        <div class="flex items-center justify-between mb-1.5 sm:mb-2">
+                            <span class="badge-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold bg-${statusColor}-100 text-${statusColor}-700 border border-${statusColor}-200 uppercase">${up.status || 'Planning'}</span>
+                            <span class="text-[8px] sm:text-[10px] font-mono text-slate-400">${up.category || 'General'}</span>
+                        </div>
+                        <h3 class="text-sm sm:text-lg font-bold text-slate-900 leading-tight">${up.title || 'Untitled'}</h3>
+                        <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">${(up.content || '').substring(0, 120)}${(up.content || '').length > 120 ? '...' : ''}</p>
+                        ${imageHtml}
+                        <div class="mt-3 sm:mt-4 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400">
+                            <span>${up.timestamp ? up.timestamp.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : ''}</span>
+                            ${up.tags && up.tags.length ? `<div class="flex gap-1">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[9px]">#${t}</span>`).join('')}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
         function startRealtimeListener() {
             if (isListening) return;
             isListening = true;
@@ -1153,14 +1442,21 @@
                     allUpdates = [];
                     snapshot.forEach(doc => {
                         const data = doc.data();
+                        let timestamp = new Date();
+                        if (data.timestamp) {
+                            if (data.timestamp.toDate) {
+                                timestamp = data.timestamp.toDate();
+                            } else if (data.timestamp instanceof Date) {
+                                timestamp = data.timestamp;
+                            }
+                        }
                         allUpdates.push({
                             id: doc.id,
                             ...data,
-                            timestamp: data.timestamp?.toDate?.() || new Date()
+                            timestamp: timestamp
                         });
                     });
                     
-                    // Show toast notification for new updates
                     showNewUpdateToast();
                     renderUpdatesDrawer();
                     generateStructuredData();
@@ -1171,8 +1467,6 @@
                 });
         }
 
-        // ===== TOAST FOR NEW UPDATES =====
-        let lastUpdateCount = 0;
         function showNewUpdateToast() {
             if (lastUpdateCount === 0) {
                 lastUpdateCount = allUpdates.length;
@@ -1197,160 +1491,7 @@
             lastUpdateCount = allUpdates.length;
         }
 
-        async function fetchUpdatesDrawer() {
-            try {
-                const snapshot = await db.collection('updates')
-                    .orderBy('timestamp', 'desc')
-                    .get();
-                if (snapshot.empty) {
-                    grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No updates yet. Check back soon.</div>`;
-                    return;
-                }
-                allUpdates = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    allUpdates.push({
-                        id: doc.id,
-                        ...data,
-                        timestamp: data.timestamp?.toDate?.() || new Date()
-                    });
-                });
-                lastUpdateCount = allUpdates.length;
-                renderUpdatesDrawer();
-                // Start real-time listener after initial load
-                startRealtimeListener();
-            } catch (e) {
-                console.error('Firestore error:', e);
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-red-400 text-sm">⚠️ Could not load updates. Please try again later.</div>`;
-            }
-        }
-
-        function getStatusColor(status) {
-            const map = { 'Planning':'slate', 'In Development':'amber', 'Testing':'blue', 'Released':'emerald', 'Paused':'rose' };
-            return map[status] || 'slate';
-        }
-
-        function renderUpdatesDrawer() {
-            const filtered = allUpdates.filter(up => {
-                const matchCategory = currentFilter === 'all' || up.category === currentFilter;
-                const matchSearch = up.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    up.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    up.tags?.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
-                return matchCategory && matchSearch;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No updates match your filters.</div>`;
-                return;
-            }
-
-            grid.innerHTML = filtered.map(up => `
-                <div class="corp-card update-card p-4 sm:p-6 rounded-2xl flex flex-col cursor-pointer" onclick="openUpdateDetailDrawer('${up.id}')">
-                    ${up.featured ? `<div class="featured-badge self-start px-2 py-0.5 rounded mb-1.5 sm:mb-2">★ FEATURED</div>` : ''}
-                    <div class="flex items-center justify-between mb-1.5 sm:mb-2">
-                        <span class="badge-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold bg-${getStatusColor(up.status)}-100 text-${getStatusColor(up.status)}-700 border border-${getStatusColor(up.status)}-200 uppercase">${up.status || 'Planning'}</span>
-                        <span class="text-[8px] sm:text-[10px] font-mono text-slate-400">${up.category || 'General'}</span>
-                    </div>
-                    <h3 class="text-sm sm:text-lg font-bold text-slate-900 leading-tight">${up.title}</h3>
-                    <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">${up.content?.substring(0, 120) || ''}${up.content?.length > 120 ? '...' : ''}</p>
-                    ${up.imageUrl ? `<div class="mt-2 sm:mt-3 rounded-lg overflow-hidden"><img src="${up.imageUrl}" alt="${up.title}" class="w-full h-28 sm:h-40 object-cover hover:opacity-90 transition" onclick="event.stopPropagation(); openImageViewer('${up.imageUrl}')" /></div>` : ''}
-                    <div class="mt-3 sm:mt-4 flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400">
-                        <span>${up.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) || ''}</span>
-                        ${up.tags ? `<div class="flex gap-1">${up.tags.slice(0,2).map(t => `<span class="bg-slate-100 px-1.5 sm:px-2 py-0.5 rounded-full text-[7px] sm:text-[9px]">#${t}</span>`).join('')}</div>` : ''}
-                    </div>
-                </div>
-            `).join('');
-
-            lucide.createIcons();
-        }
-
-        async function openUpdateDetailDrawer(id) {
-            const up = allUpdates.find(u => u.id === id);
-            if (!up) return;
-            
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 z-60 bg-black/50 backdrop-blur flex items-center justify-center p-3 sm:p-4';
-            modal.id = 'updateDetailModalDrawer';
-            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-            
-            modal.innerHTML = `
-                <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 border border-slate-200 shadow-2xl">
-                    <div class="flex items-start justify-between mb-3 sm:mb-4">
-                        <div>
-                            <span class="inline-block text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-${getStatusColor(up.status)}-100 text-${getStatusColor(up.status)}-700">${up.status || 'Planning'}</span>
-                            <h3 class="text-lg sm:text-2xl font-black text-slate-900 mt-1 sm:mt-2">${up.title}</h3>
-                            <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-slate-400">
-                                <span>${up.category || 'General'}</span>
-                                <span>•</span>
-                                <span>${up.timestamp?.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) || ''}</span>
-                                ${up.featured ? `<span class="featured-badge px-1.5 sm:px-2 py-0.5 rounded">★ Featured</span>` : ''}
-                            </div>
-                        </div>
-                        <button onclick="this.closest('#updateDetailModalDrawer').remove()" class="p-1.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500">
-                            <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        </button>
-                    </div>
-                    
-                    ${up.imageUrl ? `<div class="rounded-xl overflow-hidden bg-slate-100 mb-3 sm:mb-4 cursor-pointer" onclick="openImageViewer('${up.imageUrl}')"><img src="${up.imageUrl}" alt="${up.title}" class="w-full max-h-48 sm:max-h-80 object-cover" /></div>` : ''}
-                    
-                    <div class="text-xs sm:text-sm text-slate-600 leading-relaxed">${up.content || 'No content.'}</div>
-                    
-                    ${up.changelog && up.changelog.length ? `
-                        <div class="border-t border-slate-100 pt-3 sm:pt-4 mt-3 sm:mt-4">
-                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">Changelog</h4>
-                            <ul class="list-disc list-inside space-y-0.5 sm:space-y-1 text-[10px] sm:text-xs text-slate-500">${up.changelog.map(c => `<li>${c}</li>`).join('')}</ul>
-                        </div>
-                    ` : ''}
-                    
-                    ${up.tags && up.tags.length ? `
-                        <div class="border-t border-slate-100 pt-3 sm:pt-4 mt-3 sm:mt-4">
-                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">Tags</h4>
-                            <div class="flex flex-wrap gap-1.5 sm:gap-2 mt-1 sm:mt-2">${up.tags.map(t => `<span class="bg-slate-100 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-xs text-slate-700">#${t}</span>`).join('')}</div>
-                        </div>
-                    ` : ''}
-                    
-                    <div class="border-t border-slate-100 pt-3 sm:pt-4 mt-3 sm:mt-4 flex justify-end">
-                        <button onclick="this.closest('#updateDetailModalDrawer').remove()" class="px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-xl bg-slate-900 text-white font-bold text-[9px] sm:text-xs uppercase tracking-wider hover:bg-blue-600 transition-colors">Close</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            lucide.createIcons();
-        }
-
-        // Category filter for drawer
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                categoryBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.cat;
-                renderUpdatesDrawer();
-            });
-        });
-
-        // Search for drawer
-        searchInput.addEventListener('input', function() {
-            searchTerm = this.value;
-            renderUpdatesDrawer();
-        });
-
-        // ===== AI ACCESSIBILITY =====
-        window.getStardustUpdates = function() {
-            return allUpdates.map(u => ({
-                title: u.title,
-                content: u.content,
-                category: u.category,
-                status: u.status,
-                featured: u.featured,
-                tags: u.tags || [],
-                date: u.timestamp?.toISOString() || new Date().toISOString(),
-                imageUrl: u.imageUrl || null
-            }));
-        };
-
         function generateStructuredData() {
-            // Remove old script
             const oldScript = document.querySelector('script[data-stardust-ld]');
             if (oldScript) oldScript.remove();
             
@@ -1385,9 +1526,171 @@
             document.head.appendChild(script);
         }
 
+        // ===== UPDATE DETAIL DRAWER =====
+        async function openUpdateDetailDrawer(id) {
+            let up = latestUpdates.find(u => u.id === id);
+            
+            if (!up) {
+                up = allUpdates.find(u => u.id === id);
+            }
+            
+            if (!up) {
+                try {
+                    const doc = await db.collection('updates').doc(id).get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        let timestamp = new Date();
+                        if (data.timestamp) {
+                            if (data.timestamp.toDate) {
+                                timestamp = data.timestamp.toDate();
+                            } else if (data.timestamp instanceof Date) {
+                                timestamp = data.timestamp;
+                            }
+                        }
+                        up = { id: doc.id, ...data, timestamp: timestamp };
+                    }
+                } catch (e) {
+                    console.error('Error fetching update:', e);
+                }
+            }
+            
+            if (!up) {
+                toast('Update not found', 'error');
+                return;
+            }
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-60 bg-black/50 backdrop-blur flex items-center justify-center p-3 sm:p-4';
+            modal.id = 'updateDetailModalDrawer';
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+            
+            const statusColor = up.status ? getStatusColor(up.status) : 'slate';
+            
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 border border-slate-200 shadow-2xl">
+                    <div class="flex items-start justify-between mb-3 sm:mb-4">
+                        <div>
+                            <span class="inline-block text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-${statusColor}-100 text-${statusColor}-700">${up.status || 'Planning'}</span>
+                            <h3 class="text-lg sm:text-2xl font-black text-slate-900 mt-1 sm:mt-2">${up.title || 'Untitled'}</h3>
+                            <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-slate-400">
+                                <span>${up.category || 'General'}</span>
+                                <span>•</span>
+                                <span>${up.timestamp ? up.timestamp.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) : ''}</span>
+                                ${up.featured ? `<span class="featured-badge px-1.5 sm:px-2 py-0.5 rounded">★ Featured</span>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="this.closest('#updateDetailModalDrawer').remove()" class="p-1.5 sm:p-2 rounded-lg hover:bg-slate-100 text-slate-500">
+                            <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                        </button>
+                    </div>
+                    
+                    ${up.imageUrl ? `<div class="rounded-xl overflow-hidden bg-slate-100 mb-3 sm:mb-4 cursor-pointer" onclick="openImageViewer('${up.imageUrl}')"><img src="${up.imageUrl}" alt="${up.title}" class="w-full max-h-48 sm:max-h-80 object-cover" /></div>` : ''}
+                    
+                    <div class="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">${up.content || 'No content.'}</div>
+                    
+                    ${up.changelog && up.changelog.length ? `
+                        <div class="border-t border-slate-100 pt-3 sm:pt-4 mt-3 sm:mt-4">
+                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">Changelog</h4>
+                            <ul class="list-disc list-inside space-y-0.5 sm:space-y-1 text-[10px] sm:text-xs text-slate-500">${up.changelog.map(c => `<li>${c}</li>`).join('')}</ul>
+                        </div>
+                    ` : ''}
+                    
+                    ${up.tags && up.tags.length ? `
+                        <div class="border-t border-slate-100 pt-3 sm:pt-4 mt-3 sm:mt-4">
+                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">Tags</h4>
+                            <div class="flex flex-wrap gap-1.5 sm:gap-2 mt-1 sm:mt-2">${up.tags.map(t => `<span class="bg-slate-100 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-xs text-slate-700">#${t}</span>`).join('')}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="border-t border-slate-100 pt-3 sm:pt-4 mt-3 sm:mt-4 flex justify-end">
+                        <button onclick="this.closest('#updateDetailModalDrawer').remove()" class="px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-xl bg-slate-900 text-white font-bold text-[9px] sm:text-xs uppercase tracking-wider hover:bg-blue-600 transition-colors">Close</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        // ===== TOAST FUNCTION =====
+        function toast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'error' ? 'alert-circle' : type === 'success' ? 'check-circle' : 'info';
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> ${message}`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ===== CATEGORY FILTER =====
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.cat;
+                renderUpdatesDrawer();
+            });
+        });
+
+        // ===== SEARCH =====
+        searchInput.addEventListener('input', function() {
+            searchTerm = this.value;
+            renderUpdatesDrawer();
+        });
+
+        // ===== AI ACCESSIBILITY =====
+        window.getStardustUpdates = function() {
+            return allUpdates.map(u => ({
+                title: u.title,
+                content: u.content,
+                category: u.category,
+                status: u.status,
+                featured: u.featured,
+                tags: u.tags || [],
+                date: u.timestamp?.toISOString() || new Date().toISOString(),
+                imageUrl: u.imageUrl || null
+            }));
+        };
+
+        window.getStardustLatestUpdates = function() {
+            return latestUpdates.map(u => ({
+                title: u.title,
+                content: u.content,
+                category: u.category,
+                status: u.status,
+                featured: u.featured,
+                tags: u.tags || [],
+                date: u.timestamp?.toISOString() || new Date().toISOString(),
+                imageUrl: u.imageUrl || null
+            }));
+        };
+
+        window.getStardustWebsites = function() {
+            return allWebsites.filter(w => w.status === 'Published').map(w => ({
+                name: w.name,
+                type: w.type,
+                description: w.description,
+                url: w.url,
+                imageUrl: w.imageUrl || null,
+                date: w.timestamp?.toISOString() || new Date().toISOString()
+            }));
+        };
+
         // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
+            
+            // Fetch websites
+            fetchWebsites();
+            
+            // Start websites real-time listener
+            startWebsitesListener();
             
             // Fetch latest 3 updates for main screen
             fetchLatestUpdates();
@@ -1395,10 +1698,12 @@
             // Start real-time listener for latest updates
             startLatestUpdatesListener();
             
-            console.log('🌟 STARDUST UPDATES API:');
+            console.log('🌟 STARDUST MAIN WEBSITE v2.0');
             console.log('📡 Call window.getStardustUpdates() to get ALL updates');
             console.log('📡 Call window.getStardustLatestUpdates() to get LATEST 3 updates');
+            console.log('📡 Call window.getStardustWebsites() to get PUBLISHED websites');
             console.log('🔄 Real-time updates enabled - new posts appear instantly!');
+            console.log('🌐 Websites auto-sync from Admin Panel!');
             console.log('🤖 AI accessible: Structured data available for crawlers');
         });
     </script>
